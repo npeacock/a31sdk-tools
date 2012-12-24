@@ -9,7 +9,7 @@ version = "100"
 machine = "onda_m978q9"
 
 [platform]
-eraseflag   = 1
+eraseflag   = 0
 ;----------------------------------------------------------------------------------
 ;   system configuration
 ;   ?
@@ -85,13 +85,11 @@ jtag_do         = port:PH11<3><default><default><default>
 jtag_di         = port:PH12<3><default><default><default>
 
 [clock]
-pll3            = 297
 pll4            = 300
 pll6            = 600
-pll7            = 297
 pll8            = 360
 pll9            = 297
-pll10           = 297
+pll10           = 264
 
 ;*****************************************************************************
 ;sdram configuration
@@ -409,8 +407,8 @@ fb1_scaler_mode_enable   = 0
 fb1_width                = 0
 fb1_height               = 0
 
-lcd0_backlight           = 197
-lcd1_backlight           = 197
+lcd0_backlight           = 50
+lcd1_backlight           = 50
 
 lcd0_bright              = 50
 lcd0_contrast            = 50
@@ -745,7 +743,9 @@ usb_det_vbus_gpio   = port:PA14<0><0><default><default>
 usb_drv_vbus_gpio   = port:PA13<1><0><default><0>
 usb_restrict_gpio   = port:PA27<1><0><default><0>
 usb_host_init_state = 0
-usb_restric_flag    = 0
+usb_restric_flag    = 1
+usb_restric_voltage = 3550000
+usb_restric_capacity= 5
 ;--------------------------------
 ;---       USB1控制标志
 ;--------------------------------
@@ -757,7 +757,7 @@ usb_id_gpio         =
 usb_det_vbus_gpio   =
 usb_drv_vbus_gpio   =
 usb_restrict_gpio   =
-usb_host_init_state = 1
+usb_host_init_state = 0
 usb_restric_flag    = 0
 
 ;--------------------------------
@@ -816,6 +816,7 @@ gsensor_int2        =
 ;wifi configuration
 ;wifi_sdc_id    ---  0- SDC0, 1- SDC1, 2- SDC2, 3- SDC3
 ;wifi_usbc_id  ---  0- USB0, 1- USB1, 2- USB2
+;wifi_usbc_type --  1- EHCI(speed 2.0), 2- OHCI(speed 1.0)
 ;wifi_mod_sel   ---  0- none, 1- bcm40181, 2- bcm40183(wifi+bt),
 ;                    3 - rtl8723as(wifi+bt), 4- rtl8189es(SM89E00),
 ;                    5 - rtl8192cu, 6 - rtl8188eu
@@ -824,23 +825,21 @@ gsensor_int2        =
 wifi_used          = 1
 wifi_sdc_id        = 1
 wifi_usbc_id       = 1
+wifi_usbc_type     = 1
 wifi_mod_sel       = 6
+wifi_power         = "axp22_aldo1"
 
 ; 1 - bcm40181 sdio wifi gpio config
-;bcm40181_vdd_en        = port:PG18<1><default><default><0>
-;bcm40181_vcc_en        = port:PG18<1><default><default><0>
 ;bcm40181_shdn          = port:PG10<1><default><default><0>
 ;bcm40181_host_wake     = port:PG12<0><default><default><0>
 
 ; 2 - bcm40183 sdio wifi gpio config
-;bcm40183_vdd_en        = port:PG18<1><default><default><0>
-;bcm40183_vcc_en        = port:PG18<1><default><default><0>
 ;bcm40183_wl_regon      = port:PG10<1><default><default><0>
 ;bcm40183_wl_host_wake  = port:PG12<0><default><default><0>
 ;bcm40183_bt_rst        = port:PG11<1><default><default><0>
 ;bcm40183_bt_regon      = port:PG11<1><default><default><0>
-;bcm40183_bt_wake       = port:XXX<1><default><default><0>
-;bcm40183_bt_host_wake  = port:XXX<0><default><default><0>
+;bcm40183_bt_wake       = port:PG17<1><default><default><0>
+;bcm40183_bt_host_wake  = port:PG18<0><default><default><0>
 
 ; 3 - rtl8723as sdio wifi + bt gpio config
 ;rtk_rtl8723as_wl_dis       = port:PG10<1><default><default><0>
@@ -849,16 +848,8 @@ wifi_mod_sel       = 6
 ;rtk_rtl8723as_bt_host_wake = port:PG17<0><default><default><0>
 
 ; 4 - rtl8189es sdio wifi gpio config
-;rtl8189es_vdd_en       = port:PG18<1><default><default><0>
-;rtl8189es_vcc_en       = port:PG18<1><default><default><0>
 ;rtl8189es_shdn         = port:PG10<1><default><default><0>
 ;rtl8189es_wakeup       = port:PG12<1><default><default><1>
-
-; 5 - rtl8192cu usb wifi gpio config
-;rtl8192cu_power    = port:PH27<1><0><default><0>
-
-; 6 - rtl8188eu usb wifi gpio conifg
-;rtl8188eu_power    = port:PH27<1><0><default><0>
 
 ;--------------------------------------------------------------------------------
 ;3G configuration
@@ -940,10 +931,14 @@ pcm_din             = port:PG15<3><1><default><default>
 [spdif_para]
 spdif_used          = 1
 spdif_dout          = port:PH28<3><1><default><default>
-spdif_din           =
+spdif_din           = port:PH27<3><1><default><default>
 
+;pa_val: 31 level,1.5db/step.0x1f is the large volume.
+;cap_val:0x0--0db,0x1--24db,0x2--27db,0x3--30db,0x4--33db,0x5--36db,0x6--39db,0x7--42db
 [audio_para]
 audio_used          = 1
+pa_vol				= 0x1b
+cap_vol				= 0x5
 audio_pa_ctrl       = port:PA18<1><default><default><0>
 
 ;----------------------------------------------------------------------------------
@@ -962,37 +957,37 @@ ir_rx               = port:PL04<2><1><default><default>
 ;pmu_battery_rdc             ---battery initial resistance
 ;pmu_battery_cap             ---battery capability,mAh
 ;pmu_batdeten		     ---battery detect en;0:disable 1:enable
-;pmu_runtime_chgcur          ---set initial charging current limite,mA，300/400/500/600/700/800/900/1000/1100/1200/1300/1400/1500/1600/1700/1800
-;pmu_earlysuspend_chgcur     ---set earlysuspend charging current limite,mA，300/400/500/600/700/800/900/1000/1100/1200/1300/1400/1500/1600/1700/1800
-;pmu_suspend_chgcur          ---set suspend charging current limite,mA，300/400/500/600/700/800/900/1000/1100/1200/1300/1400/1500/1600/1700/1800
-;pmu_shutdown_chgcur         ---set shutdown charging current limite,mA，300/400/500/600/700/800/900/1000/1100/1200/1300/1400/1500/1600/1700/1800
+;pmu_runtime_chgcur          ---set initial charging current limite,mA，300/450/600/750/900/1050/1200/1350/1500/1650/1800/1950/
+;pmu_earlysuspend_chgcur     ---set earlysuspend charging current limite,mA，300/450/600/750/900/1050/1200/1350/1500/1650/1800/1950/
+;pmu_suspend_chgcur          ---set suspend charging current limite,mA，300/450/600/750/900/1050/1200/1350/1500/1650/1800/1950/
+;pmu_shutdown_chgcur         ---set shutdown charging current limite,mA，300/450/600/750/900/1050/1200/1350/1500/1650/1800/1950/
 ;pmu_init_chgvol             ---set initial charing target voltage,mV,4100/4220/4200/4240
 ;pmu_init_chgend_rate        ---set initial charing end current  rate,10/15
-;pmu_init_chg_enabled        ---set initial charing enabled,0:关闭,1:打开
+;pmu_init_chg_enabled        ---set initial charing enabled,0:disable,1:enable
 ;pmu_init_adc_freq           ---set initial adc frequency,Hz,100/200/400/800
 ;pmu_init_adcts_freq         ---set initial adc TS,Hz,100/200/400/800
 ;pmu_init_chg_pretime        ---set initial pre-charging time,min,40/50/60/70
 ;pmu_init_chg_csttime        ---set initial constance-charging time,min,360/480/600/720
 ;pmu_batt_cap_correct	     ---correct the battery capacity or not when one charge cycle 0:not correct 1:correct
-;pmu_bat_para1 		     ---battery indication at 2.99V
-;pmu_bat_para2               ---battery indication at 3.13V
-;pmu_bat_para3               ---battery indication at 3.27V
-;pmu_bat_para4               ---battery indication at 3.34V
-;pmu_bat_para5               ---battery indication at 3.41V
-;pmu_bat_para6               ---battery indication at 3.48V
-;pmu_bat_para7               ---battery indication at 3.52V
-;pmu_bat_para8               ---battery indication at 3.55V
-;pmu_bat_para9               ---battery indication at 3.57V
-;pmu_bat_para10              ---battery indication at 3.59V
-;pmu_bat_para11              ---battery indication at 3.61V
-;pmu_bat_para12              ---battery indication at 3.63V
-;pmu_bat_para13              ---battery indication at 3.64V
-;pmu_bat_para14              ---battery indication at 3.66V
-;pmu_bat_para15              ---battery indication at 3.7V
-;pmu_bat_para16              ---battery indication at 3.73V
-;pmu_bat_para17              ---battery indication at 3.77V
-;pmu_bat_para18              ---battery indication at 3.78V
-;pmu_bat_para19              ---battery indication at 3.8V
+;pmu_bat_para1 		     			 ---battery indication at 3.13V
+;pmu_bat_para2               ---battery indication at 3.27V
+;pmu_bat_para3               ---battery indication at 3.34V
+;pmu_bat_para4               ---battery indication at 3.41V
+;pmu_bat_para5               ---battery indication at 3.48V
+;pmu_bat_para6               ---battery indication at 3.52V
+;pmu_bat_para7               ---battery indication at 3.55V
+;pmu_bat_para8               ---battery indication at 3.57V
+;pmu_bat_para9               ---battery indication at 3.59V
+;pmu_bat_para10              ---battery indication at 3.61V
+;pmu_bat_para11              ---battery indication at 3.63V
+;pmu_bat_para12              ---battery indication at 3.64V
+;pmu_bat_para13              ---battery indication at 3.66V
+;pmu_bat_para14              ---battery indication at 3.7V
+;pmu_bat_para15              ---battery indication at 3.73V
+;pmu_bat_para16              ---battery indication at 3.77V
+;pmu_bat_para17              ---battery indication at 3.78V
+;pmu_bat_para18              ---battery indication at 3.8V
+;pmu_bat_para19              ---battery indication at 3.82V
 ;pmu_bat_para20              ---battery indication at 3.84V
 ;pmu_bat_para21              ---battery indication at 3.85V
 ;pmu_bat_para22              ---battery indication at 3.87V
@@ -1040,7 +1035,7 @@ pmu_irq_id                 = 0
 pmu_battery_rdc            = 100
 pmu_battery_cap            = 0
 pmu_batdeten               = 1
-pmu_runtime_chgcur         = 300
+pmu_runtime_chgcur         = 900
 pmu_earlysuspend_chgcur    = 900
 pmu_suspend_chgcur         = 1500
 pmu_shutdown_chgcur        = 1500
@@ -1060,15 +1055,15 @@ pmu_bat_para4              = 0
 pmu_bat_para5              = 0
 pmu_bat_para6              = 0
 pmu_bat_para7              = 0
-pmu_bat_para8              = 5
-pmu_bat_para9              = 7
+pmu_bat_para8              = 0
+pmu_bat_para9              = 5
 pmu_bat_para10             = 8
 pmu_bat_para11             = 9
 pmu_bat_para12             = 10
 pmu_bat_para13             = 13
 pmu_bat_para14             = 16
-pmu_bat_para15             = 26
-pmu_bat_para16             = 36
+pmu_bat_para15             = 20
+pmu_bat_para16             = 33
 pmu_bat_para17             = 41
 pmu_bat_para18             = 46
 pmu_bat_para19             = 50
@@ -1086,9 +1081,9 @@ pmu_bat_para30             = 94
 pmu_bat_para31             = 95
 pmu_bat_para32             = 100
 
-pmu_usbvol_limit           = 1
+pmu_usbvol_limit           = 0
 pmu_usbcur_limit           = 0
-pmu_usbvol                 = 4400
+pmu_usbvol                 = 4000
 pmu_usbcur                 = 0
 pmu_usbvol_pc              = 4400
 pmu_usbcur_pc              = 900
@@ -1117,47 +1112,46 @@ power_start                = 0
 ; dvfs voltage-frequency table configuration
 ;
 ; max_freq: cpu maximum frequency, based on Hz, can not be more than 1008MHz
-; min_freq: cpu minimum frequency, based on Hz, can not be less than 60MHz
+; min_freq: cpu minimum frequency, based on Hz, can not be less than 96MHz
 ;
 ; LV_count: count of LV_freq/LV_volt, must be < 16
 ;
-; LV1: core vdd is 1.20v if cpu frequency is (900Mhz,  1008Mhz]
-; LV2: core vdd is 1.20v if cpu frequency is (600Mhz,   900Mhz]
-; LV3: core vdd is 1.20v if cpu frequency is (420Mhz,   600Mhz]
-; LV4: core vdd is 1.20v if cpu frequency is (360Mhz,   420Mhz]
-; LV5: core vdd is 1.20v if cpu frequency is (300Mhz,   360Mhz]
-; LV6: core vdd is 1.20v if cpu frequency is (240Mhz,   300Mhz]
-; LV7: core vdd is 1.20v if cpu frequency is (120Mhz,   240Mhz]
-; LV8: core vdd is 1.20v if cpu frequency is (60Mhz,    120Mhz]
+; LV1: core vdd is 1.26v if cpu frequency is (1104Mhz,  xxxxMhz]
+; LV2: core vdd is 1.26v if cpu frequency is (1056Mhz,  1104Mhz]
+; LV3: core vdd is 1.20v if cpu frequency is (912Mhz,   1056Mhz]
+; LV4: core vdd is 1.10v if cpu frequency is (720Mhz,   912Mhz]
+; LV5: core vdd is 1.00v if cpu frequency is (480Mhz,   720Mhz]
+; LV6: core vdd is 0.90v if cpu frequency is (0Mhz,     480Mhz]
+; LV7: core vdd is 0.90v if cpu frequency is (0Mhz,     480Mhz]
+; LV8: core vdd is 0.90v if cpu frequency is (0Mhz,     480Mhz]
 ;
 ;----------------------------------------------------------------------------------
 [dvfs_table]
 max_freq = 1008000000
-min_freq = 60000000
+min_freq = 96000000
 
 LV_count = 8
 
-LV1_freq = 900000000
-LV1_volt = 1200
+LV1_freq = 1104000000
+LV1_volt = 1260
 
-LV2_freq = 600000000
+LV2_freq = 1056000000
 LV2_volt = 1200
 
-LV3_freq = 420000000
-LV3_volt = 1200
+LV3_freq = 912000000
+LV3_volt = 1100
 
-LV4_freq = 360000000
-LV4_volt = 1200
+LV4_freq = 720000000
+LV4_volt = 1000
 
-LV5_freq = 300000000
-LV5_volt = 1200
+LV5_freq = 480000000
+LV5_volt = 900
 
-LV6_freq = 240000000
-LV6_volt = 1200
+LV6_freq = 0
+LV6_volt = 900
 
-LV7_freq = 120000000
-LV7_volt = 1200
+LV7_freq = 0
+LV7_volt = 900
 
-LV8_freq = 60000000
-LV8_volt = 1200
-
+LV8_freq = 0
+LV8_volt = 900
