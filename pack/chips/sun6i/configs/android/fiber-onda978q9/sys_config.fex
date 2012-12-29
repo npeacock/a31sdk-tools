@@ -10,6 +10,10 @@ machine = "onda_m978q9"
 
 [platform]
 eraseflag   = 0
+
+[fel_key]
+fel_key_type = 1
+
 ;----------------------------------------------------------------------------------
 ;   system configuration
 ;   ?
@@ -96,9 +100,9 @@ pll10           = 264
 ;
 ;*****************************************************************************
 [dram_para]
-dram_clk        = 288
+dram_clk        = 312
 dram_type       = 3
-dram_zq         = 0x17b
+dram_zq         = 0xFB
 dram_odt_en     = 0
 dram_para1      = 0x10F40800
 dram_para2      = 0x1211
@@ -299,6 +303,7 @@ spi_cs1        = port:PA25<4><default><default><default>
 ;----------------------------------------------------------------------------------
 [ctp_para]
 ctp_used            = 1
+ctp_name            = "gsl3680"
 ctp_twi_id          = 1
 ctp_twi_addr        = 0x40
 ctp_screen_max_x    = 2048
@@ -461,7 +466,7 @@ lcd_hbp             = 10
 lcd_ht              = 2208
 lcd_hspw            = 5
 lcd_vbp             = 10
-lcd_vt              = 1549
+lcd_vt              = 1858
 lcd_vspw            = 1
 lcd_frm             = 0
 lcd_edp_tx_ic       = 0
@@ -471,6 +476,7 @@ lcd_io_phase        = 0x0000
 
 deu_mode            = 0
 lcdgamma4iep        = 22
+florid_color        = 90
 
 lcd_bl_en           = port:PA25<1><0><default><1>
 lcd_power           = port:power2<1><0><default><1>
@@ -548,12 +554,12 @@ csi_twi_addr        = 0x78
 csi_if              = 0
 csi_vflip           = 0
 csi_hflip           = 1
-csi_iovdd           = "axp22_eldo3"
+csi_iovdd           = "axp22_dldo3"
 csi_avdd            = "axp22_dldo4"
-csi_dvdd            = "axp22_eldo2"
+csi_dvdd            = "axp22_eldo1"
 csi_vol_iovdd       = 2800
 csi_vol_avdd        = 2800
-csi_vol_dvdd        = 1800
+csi_vol_dvdd        = 1500
 csi_flash_pol       = 1
 
 csi_mname_b         = "gc2035"
@@ -562,7 +568,7 @@ csi_twi_addr_b      = 0x88
 csi_if_b            = 0
 csi_vflip_b         = 0
 csi_hflip_b         = 0
-csi_iovdd_b         = "axp22_eldo3"
+csi_iovdd_b         = "axp22_dldo3"
 csi_avdd_b          = "axp22_dldo4"
 csi_dvdd_b          = "axp22_eldo2"
 csi_vol_iovdd_b     = 2800
@@ -787,7 +793,7 @@ product_name        = "Android"
 serial_number       = "20080411"
 
 [msc_feature]
-vendor_name         = "USB 2.0"
+vendor_name         = "ONDA MID"
 product_name        = "USB Flash Driver"
 release             = 100
 luns                = 2
@@ -937,7 +943,7 @@ spdif_din           = port:PH27<3><1><default><default>
 ;cap_val:0x0--0db,0x1--24db,0x2--27db,0x3--30db,0x4--33db,0x5--36db,0x6--39db,0x7--42db
 [audio_para]
 audio_used          = 1
-pa_vol				= 0x1b
+pa_vol				= 0x17
 cap_vol				= 0x5
 audio_pa_ctrl       = port:PA18<1><default><default><0>
 
@@ -1086,7 +1092,7 @@ pmu_usbcur_limit           = 0
 pmu_usbvol                 = 4000
 pmu_usbcur                 = 0
 pmu_usbvol_pc              = 4400
-pmu_usbcur_pc              = 900
+pmu_usbcur_pc              = 500
 pmu_pwroff_vol             = 3300
 pmu_pwron_vol              = 2600
 pmu_pekoff_time            = 6000
@@ -1108,6 +1114,10 @@ pmu_hot_shutdowm           = 1
 pmu_inshort                = 0
 power_start                = 0
 
+[recovery_key]
+key_min			=28
+key_max			=32
+
 ;----------------------------------------------------------------------------------
 ; dvfs voltage-frequency table configuration
 ;
@@ -1118,8 +1128,8 @@ power_start                = 0
 ;
 ; LV1: core vdd is 1.26v if cpu frequency is (1104Mhz,  xxxxMhz]
 ; LV2: core vdd is 1.26v if cpu frequency is (1056Mhz,  1104Mhz]
-; LV3: core vdd is 1.20v if cpu frequency is (912Mhz,   1056Mhz]
-; LV4: core vdd is 1.10v if cpu frequency is (720Mhz,   912Mhz]
+; LV3: core vdd is 1.20v if cpu frequency is (864Mhz,   1056Mhz]
+; LV4: core vdd is 1.10v if cpu frequency is (720Mhz,   864Mhz]
 ; LV5: core vdd is 1.00v if cpu frequency is (480Mhz,   720Mhz]
 ; LV6: core vdd is 0.90v if cpu frequency is (0Mhz,     480Mhz]
 ; LV7: core vdd is 0.90v if cpu frequency is (0Mhz,     480Mhz]
@@ -1128,30 +1138,31 @@ power_start                = 0
 ;----------------------------------------------------------------------------------
 [dvfs_table]
 max_freq = 1008000000
-min_freq = 96000000
+min_freq = 384000000
 
 LV_count = 8
 
 LV1_freq = 1104000000
-LV1_volt = 1260
+LV1_volt = 1300
 
 LV2_freq = 1056000000
-LV2_volt = 1200
+LV2_volt = 1260
 
-LV3_freq = 912000000
-LV3_volt = 1100
+LV3_freq = 864000000
+LV3_volt = 1200
 
 LV4_freq = 720000000
-LV4_volt = 1000
+LV4_volt = 1100
 
 LV5_freq = 480000000
-LV5_volt = 900
+LV5_volt = 1000
 
 LV6_freq = 0
-LV6_volt = 900
+LV6_volt = 1000
 
 LV7_freq = 0
-LV7_volt = 900
+LV7_volt = 1000
 
 LV8_freq = 0
-LV8_volt = 900
+LV8_volt = 1000
+
