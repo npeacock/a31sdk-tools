@@ -32,7 +32,7 @@ storage_type    = -1
 [power_sply]
 dcdc1_vol                  = 3000
 dcdc2_vol                  = 1200
-dcdc3_vol                  = 1200
+dcdc3_vol                  = 1260
 dcdc4_vol                  = 1200
 dcdc5_vol                  = 1500
 aldo2_vol                  = 1800
@@ -93,7 +93,7 @@ pll4            = 300
 pll6            = 600
 pll8            = 360
 pll9            = 297
-pll10           = 702 
+pll10           = 702
 
 ;*****************************************************************************
 ;sdram configuration
@@ -939,6 +939,33 @@ bt_wakeup           =
 bt_gpio             =
 bt_rst              =
 
+;--------------------------------------------------------------------------------
+;i2s_master:1: SND_SOC_DAIFMT_CBM_CFM(codec clk & FRM master)        use
+;			2: SND_SOC_DAIFMT_CBS_CFM(codec clk slave & FRM master)  not use
+;			3: SND_SOC_DAIFMT_CBM_CFS(codec clk master & frame slave) not use
+;			4: SND_SOC_DAIFMT_CBS_CFS(codec clk & FRM slave)         use
+;i2s_select:0 is pcm.1 is i2s
+;audio_format: 1:SND_SOC_DAIFMT_I2S(standard i2s format).            use
+;			   2:SND_SOC_DAIFMT_RIGHT_J(right justfied format).
+;			   3:SND_SOC_DAIFMT_LEFT_J(left justfied format)
+;			   4:SND_SOC_DAIFMT_DSP_A(pcm. MSB is available on 2nd BCLK rising edge after LRC rising edge). use
+;			   5:SND_SOC_DAIFMT_DSP_B(pcm. MSB is available on 1nd BCLK rising edge after LRC rising edge)
+;signal_inversion:1:SND_SOC_DAIFMT_NB_NF(normal bit clock + frame)  use
+;				  2:SND_SOC_DAIFMT_NB_IF(normal BCLK + inv FRM)
+;				  3:SND_SOC_DAIFMT_IB_NF(invert BCLK + nor FRM)  use
+;				  4:SND_SOC_DAIFMT_IB_IF(invert BCLK + FRM)
+;over_sample_rate: support 128fs/192fs/256fs/384fs/512fs/768fs
+;sample_resolution	:16bits/20bits/24bits
+;word_select_size 	:16bits/20bits/24bits/32bits
+;pcm_sync_period 	:16/32/64/128/256
+;msb_lsb_first 		:0: msb first; 1: lsb first
+;sign_extend 		:0: zero pending; 1: sign extend
+;slot_index 		:slot index: 0: the 1st slot - 3: the 4th slot
+;slot_width 		:8 bit width / 16 bit width
+;frame_width 		:0: long frame = 2 clock width;  1: short frame
+;tx_data_mode 		:0: 16bit linear PCM; 1: 8bit linear PCM; 2: 8bit u-law; 3: 8bit a-law
+;rx_data_mode 		:0: 16bit linear PCM; 1: 8bit linear PCM; 2: 8bit u-law; 3: 8bit a-law
+;--------------------------------------------------------------------------------
 [i2s_para]
 i2s_used            = 1
 i2s_channel         = 2
@@ -951,6 +978,33 @@ i2s_dout2           =
 i2s_dout3           =
 i2s_din             = port:PB07<2><1><default><default>
 
+;--------------------------------------------------------------------------------
+;pcm_master:1: SND_SOC_DAIFMT_CBM_CFM(codec clk & FRM master)        use
+;			2: SND_SOC_DAIFMT_CBS_CFM(codec clk slave & FRM master)  not use
+;			3: SND_SOC_DAIFMT_CBM_CFS(codec clk master & frame slave) not use
+;			4: SND_SOC_DAIFMT_CBS_CFS(codec clk & FRM slave)         use
+;pcm_select:1 is pcm.0 is i2s
+;audio_format: 1:SND_SOC_DAIFMT_I2S(standard i2s format).            use
+;			   2:SND_SOC_DAIFMT_RIGHT_J(right justfied format).
+;			   3:SND_SOC_DAIFMT_LEFT_J(left justfied format)
+;			   4:SND_SOC_DAIFMT_DSP_A(pcm. MSB is available on 2nd BCLK rising edge after LRC rising edge). use
+;			   5:SND_SOC_DAIFMT_DSP_B(pcm. MSB is available on 1nd BCLK rising edge after LRC rising edge)
+;signal_inversion:1:SND_SOC_DAIFMT_NB_NF(normal bit clock + frame)  use
+;				  2:SND_SOC_DAIFMT_NB_IF(normal BCLK + inv FRM)
+;				  3:SND_SOC_DAIFMT_IB_NF(invert BCLK + nor FRM)  use
+;				  4:SND_SOC_DAIFMT_IB_IF(invert BCLK + FRM)
+;over_sample_rate: support 128fs/192fs/256fs/384fs/512fs/768fs
+;sample_resolution	:16bits/20bits/24bits
+;word_select_size 	:16bits/20bits/24bits/32bits
+;pcm_sync_period 	:16/32/64/128/256
+;msb_lsb_first 		:0: msb first; 1: lsb first
+;sign_extend 		:0: zero pending; 1: sign extend
+;slot_index 		:slot index: 0: the 1st slot - 3: the 4th slot
+;slot_width 		:8 bit width / 16 bit width
+;frame_width 		:0: long frame = 2 clock width;  1: short frame
+;tx_data_mode 		:0: 16bit linear PCM; 1: 8bit linear PCM; 2: 8bit u-law; 3: 8bit a-law
+;rx_data_mode 		:0: 16bit linear PCM; 1: 8bit linear PCM; 2: 8bit u-law; 3: 8bit a-law
+;--------------------------------------------------------------------------------
 [pcm_para]
 pcm_used            = 1
 pcm_channel         = 2
