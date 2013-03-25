@@ -6,10 +6,14 @@
 
 [product]
 version = "100"
-machine = "onda_m978q9"
+machine = "w02"
 
 [platform]
-eraseflag   = 1
+eraseflag   = 0
+
+[fel_key]
+fel_key_type = 1
+
 ;----------------------------------------------------------------------------------
 ;   system configuration
 ;   ?
@@ -28,7 +32,7 @@ storage_type    = -1
 [power_sply]
 dcdc1_vol                  = 3000
 dcdc2_vol                  = 1200
-dcdc3_vol                  = 1200
+dcdc3_vol                  = 1260
 dcdc4_vol                  = 1200
 dcdc5_vol                  = 1500
 aldo2_vol                  = 1800
@@ -85,20 +89,22 @@ jtag_do         = port:PH11<3><default><default><default>
 jtag_di         = port:PH12<3><default><default><default>
 
 [clock]
+pll3            = 297
 pll4            = 300
 pll6            = 600
+pll7            = 297
 pll8            = 360
 pll9            = 297
-pll10           = 264
+pll10           = 702
 
 ;*****************************************************************************
 ;sdram configuration
 ;
 ;*****************************************************************************
 [dram_para]
-dram_clk        = 288
+dram_clk        = 312
 dram_type       = 3
-dram_zq         = 0x17b
+dram_zq         = 0xFB
 dram_odt_en     = 0
 dram_para1      = 0x10F40800
 dram_para2      = 0x1211
@@ -292,6 +298,20 @@ spi_miso       = port:PA24<4><default><default><default>
 spi_cs1        = port:PA25<4><default><default><default>
 
 ;----------------------------------------------------------------------------------
+;resistance tp configuration
+;----------------------------------------------------------------------------------
+[rtp_para]
+rtp_used                   = 0
+rtp_screen_size            = 5
+rtp_regidity_level         = 5
+rtp_press_threshold_enable = 0
+rtp_press_threshold        = 0x1f40
+rtp_sensitive_level        = 0xf
+rtp_exchange_x_y_flag      = 0
+
+;----------------------------------------------------------------------------------
+
+;----------------------------------------------------------------------------------
 ;capacitor tp configuration
 ;external int function
 ;wakeup output function
@@ -299,6 +319,7 @@ spi_cs1        = port:PA25<4><default><default><default>
 ;----------------------------------------------------------------------------------
 [ctp_para]
 ctp_used            = 1
+ctp_name            = "gsl3680"
 ctp_twi_id          = 1
 ctp_twi_addr        = 0x40
 ctp_screen_max_x    = 2048
@@ -309,6 +330,7 @@ ctp_exchange_x_y_flag = 1
 
 ctp_int_port        = port:PA03<6><default><default><default>
 ctp_wakeup          = port:PA02<1><default><default><1>
+
 ;----------------------------------------------------------------------------------
 ;touch key configuration
 ;----------------------------------------------------------------------------------
@@ -323,12 +345,13 @@ tkey_int            =
 ;----------------------------------------------------------------------------------
 [motor_para]
 motor_used          = 1
-motor_shake         =
+motor_shake         = port:power3<1><default><default><1>
 
 [nand0_para]
 nand_support_2ch    = 1
 
 nand0_used          = 1
+good_block_ratio    = 944
 nand0_we            = port:PC00<2><default><default><default>
 nand0_ale           = port:PC01<2><default><default><default>
 nand0_cle           = port:PC02<2><default><default><default>
@@ -440,9 +463,8 @@ lcd1_hue                 = 50
 ;lcd_edp_tx_ic         0:anx9804;  1:anx6345
 ;lcd_edp_tx_rate       1:1.62G;   2:2.7G;    3:5.4G
 ;lcd_edp_tx_lane       1/2/4lane
+;lcd_edp_colordepth    0:8bit; 1:6bit
 ;lcd_frm:              0:disable; 1:enable rgb666 dither; 2:enable rgb656 dither
-;lcd_io_phase:         0:noraml; 1:intert phase(0~3bit: vsync phase; 4~7bit:hsync phase;
-;                      8~11bit:dclk phase; 12~15bit:de phase)
 ;lcd_gamma_en          lcd gamma correction enable
 ;lcd_bright_curve_en   lcd bright curve correction enable
 ;lcd_cmap_en           lcd color map function enable
@@ -462,7 +484,7 @@ lcd_x               = 2048
 lcd_y               = 1536
 lcd_width           = 196
 lcd_height          = 147
-lcd_dclk_freq       = 205
+lcd_dclk_freq       = 208
 lcd_pwm_freq        = 50000
 lcd_pwm_pol         = 1
 lcd_pwm_max_limit   = 150
@@ -470,13 +492,13 @@ lcd_hbp             = 10
 lcd_ht              = 2208
 lcd_hspw            = 5
 lcd_vbp             = 10
-lcd_vt              = 1549
+lcd_vt              = 1570
 lcd_vspw            = 1
 lcd_frm             = 0
 lcd_edp_tx_ic       = 0
 lcd_edp_tx_rate     = 1
 lcd_edp_tx_lane     = 4
-lcd_io_phase        = 0x0000
+lcd_edp_colordepth  = 0
 lcd_gamma_en        = 0
 lcd_bright_curve_en = 1
 lcd_cmap_en         = 0
@@ -528,81 +550,173 @@ lcdvsync            = port:PD27<2><0><3><default>
 [hdmi_para]
 hdmi_used           = 1
 
+
+
 ;--------------------------------------------------------------------------------
-;csi gpio configuration
-;csi_if: 0:hv_8bit 1:hv_16bit 2:hv_24bit 3:bt656 1ch 4:bt656 2ch 5:bt656 4ch
-;csi_mode: 0:sample one csi to one buffer 1:sample two csi to one buffer
-;csi_dev_qty: The quantity of devices linked to csi interface
-;csi_vflip: flip in vertical direction 0:disable 1:enable
-;csi_hflip: flip in horizontal direction 0:disable 1:enable
-;csi_stby_mode: 0:not shut down power at standby 1:shut down power at standby
-;csi_iovdd: camera module io power , pmu power supply
-;csi_avdd:	camera module analog power , pmu power supply
-;csi_dvdd:	camera module core power , pmu power supply
-;pmu_dldo4:  fill "axp22_ldo8"
-;pmu_eldo1:  fill "axp22_ldo9"
-;pmu_eldo2:  fill "axp22_ldo10"
-;pmu_eldo3:  fill "axp22_ldo11"
-;fill "" when not using any pmu power supply
-;csi_flash_pol: the active polority of the flash light IO 0:low active 1:high active
+;vip (video input port) configuration
+;vip_used: 0:disable 1:enable
+;vip_mode: 0:sample one interface to one buffer 1:sample two interface to one buffer
+;vip_dev_qty: The quantity of devices linked to capture bus
+;vip_dev(x)_isp_used 0:not use isp 1:use isp
+;vip_dev(x)_fmt: 0:yuv 1:bayer raw rgb
+;vip_dev(x)_stby_mode: 0:not shut down power at standby 1:shut down power at standby
+;vip_dev(x)_vflip: flip in vertical direction 0:disable 1:enable
+;vip_dev(x)_hflip: flip in horizontal direction 0:disable 1:enable
+;vip_dev(x)_iovdd: camera module io power handle string, pmu power supply
+;vip_dev(x)_iovdd_vol: camera module io power voltage, pmu power supply
+;vip_dev(x)_avdd:	camera module analog power handle string, pmu power supply
+;vip_dev(x)_avdd_vol:	camera module analog power voltage, pmu power supply
+;vip_dev(x)_dvdd:	camera module core power handle string, pmu power supply
+;vip_dev(x)_dvdd_vol:	camera module core power voltage, pmu power supply
+;vip_dev(x)_afvdd:	camera module vcm power handle string, pmu power supply
+;vip_dev(x)_afvdd_vol:	camera module vcm power voltage, pmu power supply
+;x indicates the index of the devices which are linked to the same capture bus
+;fill voltage in uV, e.g. iovdd = 2.8V, vip_devx_iovdd_vol = 2800000
+;fill handle string as below:
+;axp22_eldo3
+;axp22_dldo4
+;axp22_eldo2
+;fill handle string "" when not using any pmu power supply
 ;--------------------------------------------------------------------------------
-[csi0_para]
-csi_used            = 0
 
-[csi1_para]
-csi_used            = 1
-csi_mode            = 0
-csi_dev_qty         = 2
-csi_stby_mode       = 0
+[vip0_para]
 
-csi_mname           = "ov5640"
-csi_twi_id          = 0
-csi_twi_addr        = 0x78
-csi_if              = 0
-csi_vflip           = 0
-csi_hflip           = 0
-csi_iovdd           = "axp22_ldo11"
-csi_avdd            = "axp22_ldo8"
-csi_dvdd            = "axp22_ldo9"
-csi_flash_pol       = 1
+vip_used                 = 0
+vip_mode                 = 0
+vip_dev_qty              = 1
+vip_vip_mck          		 = port:PE16<2><default><default><default>
 
-csi_mname_b         = "gc0308"
-csi_twi_id_b        = 0
-csi_twi_addr_b      = 0x42
-csi_if_b            = 0
-csi_vflip_b         = 0
-csi_hflip_b         = 1
-csi_iovdd_b         = "axp22_ldo11"
-csi_avdd_b          = "axp22_ldo8"
-csi_dvdd_b          = "axp22_ldo10"
-csi_flash_pol_b     = 1
+vip_dev0_mname           = ""
+vip_dev0_lane            = 2
+vip_dev0_twi_id          = 0
+vip_dev0_twi_addr        = 0x6c
+vip_dev0_isp_used        = 1
+vip_dev0_fmt             = 1
+vip_dev0_stby_mode       = 0
+vip_dev0_vflip           = 0
+vip_dev0_hflip           = 0
+vip_dev0_iovdd           = "axp22_dldo3"
+vip_dev0_iovdd_vol       = 2800000
+vip_dev0_avdd            = "axp22_dldo4"
+vip_dev0_avdd_vol        = 2800000
+vip_dev0_dvdd            = "axp22_eldo1"
+vip_dev0_dvdd_vol        = 1500000
+vip_dev0_afvdd           = ""
+vip_dev0_afvdd_vol       = 2800000
+vip_dev0_power_en        =
+vip_dev0_reset           =
+vip_dev0_pwdn            =
+vip_dev0_flash_en        =
+vip_dev0_flash_mode      =
+vip_dev0_af_pwdn         =
 
-csi_pck             = port:PE00<2><default><default><default>
-csi_mck             = port:PE01<2><default><default><default>
-csi_hsync           = port:PE02<2><default><default><default>
-csi_vsync           = port:PE03<2><default><default><default>
-csi_d0              =
-csi_d1              =
-csi_d2              =
-csi_d3              =
-csi_d4              = port:PE08<2><default><default><default>
-csi_d5              = port:PE09<2><default><default><default>
-csi_d6              = port:PE10<2><default><default><default>
-csi_d7              = port:PE11<2><default><default><default>
-csi_d8              = port:PE12<2><default><default><default>
-csi_d9              = port:PE13<2><default><default><default>
-csi_d10             = port:PE14<2><default><default><default>
-csi_d11             = port:PE15<2><default><default><default>
-csi_reset           = port:PE04<1><default><default><0>
-csi_power_en        =
-csi_stby            = port:PE05<1><default><default><1>
-csi_flash           =
-csi_af_en           =
-csi_reset_b         = port:PE06<1><default><default><0>
-csi_power_en_b      =
-csi_stby_b          = port:PE07<1><default><default><1>
-csi_flash_b         =
-csi_af_en_b         =
+vip_dev0_act_used        = 1
+vip_dev0_act_name        = "ad5820_act"
+vip_dev0_act_slave       = 0x18
+
+
+vip_dev1_mname           = ""
+vip_dev1_lane            = 1
+vip_dev1_twi_id          = 0
+vip_dev1_twi_addr        =
+vip_dev1_isp_used        = 0
+vip_dev1_fmt             = 1
+vip_dev1_stby_mode       = 0
+vip_dev1_vflip           = 0
+vip_dev1_hflip           = 0
+vip_dev1_iovdd           = "axp22_dldo3"
+vip_dev1_iovdd_vol       = 2800000
+vip_dev1_avdd            = "axp22_dldo4"
+vip_dev1_avdd_vol        = 2800000
+vip_dev1_dvdd            = "axp22_eldo2"
+vip_dev1_dvdd_vol        = 1800000
+vip_dev1_afvdd           = ""
+vip_dev1_afvdd_vol       = 2800000
+vip_dev1_power_en        =
+vip_dev1_reset           =
+vip_dev1_pwdn            =
+vip_dev1_flash_en        =
+vip_dev1_flash_mode      =
+vip_dev1_af_pwdn         =
+
+
+
+
+
+[vip1_para]
+
+vip_used                 = 1
+vip_mode                 = 0
+vip_dev_qty              = 2
+vip_csi_pck              = port:PE00<2><default><default><default>
+vip_csi_mck              = port:PE01<2><default><default><default>
+vip_csi_hsync            = port:PE02<2><default><default><default>
+vip_csi_vsync            = port:PE03<2><default><default><default>
+vip_csi_d0               =
+vip_csi_d1               =
+vip_csi_d2               =
+vip_csi_d3               =
+vip_csi_d4               = port:PE08<2><default><default><default>
+vip_csi_d5               = port:PE09<2><default><default><default>
+vip_csi_d6               = port:PE10<2><default><default><default>
+vip_csi_d7               = port:PE11<2><default><default><default>
+vip_csi_d8               = port:PE12<2><default><default><default>
+vip_csi_d9               = port:PE13<2><default><default><default>
+vip_csi_d10              = port:PE14<2><default><default><default>
+vip_csi_d11              = port:PE15<2><default><default><default>
+
+vip_dev0_mname           = "ov5640"
+vip_dev0_twi_id          = 0
+vip_dev0_twi_addr        = 0x78
+vip_dev0_isp_used        = 0
+vip_dev0_fmt             = 0
+vip_dev0_stby_mode       = 0
+vip_dev0_vflip           = 0
+vip_dev0_hflip           = 1
+vip_dev0_iovdd           = "axp22_dldo3"
+vip_dev0_iovdd_vol       = 2800000
+vip_dev0_avdd            = "axp22_dldo4"
+vip_dev0_avdd_vol        = 2800000
+vip_dev0_dvdd            = "axp22_eldo1"
+vip_dev0_dvdd_vol        = 1500000
+vip_dev0_afvdd           = ""
+vip_dev0_afvdd_vol       = 2800000
+vip_dev0_power_en        =
+vip_dev0_reset           = port:PE04<1><default><default><0>
+vip_dev0_pwdn            = port:PE05<1><default><default><1>
+vip_dev0_flash_en        =
+vip_dev0_flash_mode      =
+vip_dev0_af_pwdn         =
+
+
+vip_dev0_act_used        = 0
+vip_dev0_act_name        = "ad5820_act"
+vip_dev0_act_slave       = 0x18
+
+
+vip_dev1_mname           = "gc2035"
+vip_dev1_twi_id          = 0
+vip_dev1_twi_addr        = 0x88
+vip_dev1_stby_mode       = 0
+vip_dev1_isp_used        = 0
+vip_dev1_fmt             = 0
+vip_dev1_vflip           = 0
+vip_dev1_hflip           = 0
+vip_dev1_iovdd           = "axp22_dldo3"
+vip_dev1_iovdd_vol       = 2800000
+vip_dev1_avdd            = "axp22_dldo4"
+vip_dev1_avdd_vol        = 2800000
+vip_dev1_dvdd            = "axp22_eldo2"
+vip_dev1_dvdd_vol        = 1800000
+vip_dev1_afvdd           = ""
+vip_dev1_afvdd_vol       = 2800000
+vip_dev1_power_en        =
+vip_dev1_reset           = port:PE06<1><default><default><0>
+vip_dev1_pwdn            = port:PE07<1><default><default><1>
+vip_dev1_flash_en        =
+vip_dev1_flash_mode      =
+vip_dev1_af_pwdn         =
+
 
 ;--------------------------------------------------------------------------------
 ;tv configuration
@@ -794,7 +908,7 @@ product_name        = "Android"
 serial_number       = "20080411"
 
 [msc_feature]
-vendor_name         = "USB 2.0"
+vendor_name         = "ONDA MID"
 product_name        = "USB Flash Driver"
 release             = 100
 luns                = 2
@@ -807,7 +921,6 @@ luns                = 2
 gsensor_used        = 1
 gsensor_twi_id      = 2
 gsensor_twi_addr    = 0x18
-gsensor_use_int     = 0
 gsensor_int1        = port:PA09<6><1><default><default>
 gsensor_int2        =
 
@@ -823,6 +936,7 @@ gsensor_int2        =
 ;wifi configuration
 ;wifi_sdc_id    ---  0- SDC0, 1- SDC1, 2- SDC2, 3- SDC3
 ;wifi_usbc_id  ---  0- USB0, 1- USB1, 2- USB2
+;wifi_usbc_type --  1- EHCI(speed 2.0), 2- OHCI(speed 1.0)
 ;wifi_mod_sel   ---  0- none, 1- bcm40181, 2- bcm40183(wifi+bt),
 ;                    3 - rtl8723as(wifi+bt), 4- rtl8189es(SM89E00),
 ;                    5 - rtl8192cu, 6 - rtl8188eu
@@ -831,23 +945,21 @@ gsensor_int2        =
 wifi_used          = 1
 wifi_sdc_id        = 1
 wifi_usbc_id       = 1
+wifi_usbc_type     = 1
 wifi_mod_sel       = 6
+wifi_power         = "axp22_aldo1"
 
 ; 1 - bcm40181 sdio wifi gpio config
-;bcm40181_vdd_en        = port:PG18<1><default><default><0>
-;bcm40181_vcc_en        = port:PG18<1><default><default><0>
 ;bcm40181_shdn          = port:PG10<1><default><default><0>
 ;bcm40181_host_wake     = port:PG12<0><default><default><0>
 
 ; 2 - bcm40183 sdio wifi gpio config
-;bcm40183_vdd_en        = port:PG18<1><default><default><0>
-;bcm40183_vcc_en        = port:PG18<1><default><default><0>
 ;bcm40183_wl_regon      = port:PG10<1><default><default><0>
 ;bcm40183_wl_host_wake  = port:PG12<0><default><default><0>
 ;bcm40183_bt_rst        = port:PG11<1><default><default><0>
 ;bcm40183_bt_regon      = port:PG11<1><default><default><0>
-;bcm40183_bt_wake       = port:XXX<1><default><default><0>
-;bcm40183_bt_host_wake  = port:XXX<0><default><default><0>
+;bcm40183_bt_wake       = port:PG17<1><default><default><0>
+;bcm40183_bt_host_wake  = port:PG18<0><default><default><0>
 
 ; 3 - rtl8723as sdio wifi + bt gpio config
 ;rtk_rtl8723as_wl_dis       = port:PG10<1><default><default><0>
@@ -856,16 +968,8 @@ wifi_mod_sel       = 6
 ;rtk_rtl8723as_bt_host_wake = port:PG17<0><default><default><0>
 
 ; 4 - rtl8189es sdio wifi gpio config
-;rtl8189es_vdd_en       = port:PG18<1><default><default><0>
-;rtl8189es_vcc_en       = port:PG18<1><default><default><0>
 ;rtl8189es_shdn         = port:PG10<1><default><default><0>
 ;rtl8189es_wakeup       = port:PG12<1><default><default><1>
-
-; 5 - rtl8192cu usb wifi gpio config
-;rtl8192cu_power    = port:PH27<1><0><default><0>
-
-; 6 - rtl8188eu usb wifi gpio conifg
-;rtl8188eu_power    = port:PH27<1><0><default><0>
 
 ;--------------------------------------------------------------------------------
 ;3G configuration
@@ -923,9 +1027,51 @@ bt_wakeup           =
 bt_gpio             =
 bt_rst              =
 
+;--------------------------------------------------------------------------------
+;i2s_master:1: SND_SOC_DAIFMT_CBM_CFM(codec clk & FRM master)        use
+;			2: SND_SOC_DAIFMT_CBS_CFM(codec clk slave & FRM master)  not use
+;			3: SND_SOC_DAIFMT_CBM_CFS(codec clk master & frame slave) not use
+;			4: SND_SOC_DAIFMT_CBS_CFS(codec clk & FRM slave)         use
+;i2s_select:0 is pcm.1 is i2s
+;audio_format: 1:SND_SOC_DAIFMT_I2S(standard i2s format).            use
+;			   2:SND_SOC_DAIFMT_RIGHT_J(right justfied format).
+;			   3:SND_SOC_DAIFMT_LEFT_J(left justfied format)
+;			   4:SND_SOC_DAIFMT_DSP_A(pcm. MSB is available on 2nd BCLK rising edge after LRC rising edge). use
+;			   5:SND_SOC_DAIFMT_DSP_B(pcm. MSB is available on 1nd BCLK rising edge after LRC rising edge)
+;signal_inversion:1:SND_SOC_DAIFMT_NB_NF(normal bit clock + frame)  use
+;				  2:SND_SOC_DAIFMT_NB_IF(normal BCLK + inv FRM)
+;				  3:SND_SOC_DAIFMT_IB_NF(invert BCLK + nor FRM)  use
+;				  4:SND_SOC_DAIFMT_IB_IF(invert BCLK + FRM)
+;over_sample_rate: support 128fs/192fs/256fs/384fs/512fs/768fs
+;sample_resolution	:16bits/20bits/24bits
+;word_select_size 	:16bits/20bits/24bits/32bits
+;pcm_sync_period 	:16/32/64/128/256
+;msb_lsb_first 		:0: msb first; 1: lsb first
+;sign_extend 		:0: zero pending; 1: sign extend
+;slot_index 		:slot index: 0: the 1st slot - 3: the 4th slot
+;slot_width 		:8 bit width / 16 bit width
+;frame_width 		:0: long frame = 2 clock width;  1: short frame
+;tx_data_mode 		:0: 16bit linear PCM; 1: 8bit linear PCM; 2: 8bit u-law; 3: 8bit a-law
+;rx_data_mode 		:0: 16bit linear PCM; 1: 8bit linear PCM; 2: 8bit u-law; 3: 8bit a-law
+;--------------------------------------------------------------------------------
 [i2s_para]
 i2s_used            = 1
 i2s_channel         = 2
+i2s_master			= 1
+i2s_select  		= 0
+audio_format		= 4
+signal_inversion	= 3
+over_sample_rate	= 256
+sample_resolution   = 16
+word_select_size 	= 32
+pcm_sync_period 	= 256
+msb_lsb_first 	    = 0
+sign_extend 		= 0
+slot_index 		    = 0
+slot_width 		    = 16
+frame_width 		= 1
+tx_data_mode 		= 0
+rx_data_mode 		= 0
 i2s_mclk            =
 i2s_bclk            = port:PB01<2><1><default><default>
 i2s_lrclk           = port:PB02<2><1><default><default>
@@ -935,9 +1081,51 @@ i2s_dout2           =
 i2s_dout3           =
 i2s_din             = port:PB07<2><1><default><default>
 
+;--------------------------------------------------------------------------------
+;pcm_master:1: SND_SOC_DAIFMT_CBM_CFM(codec clk & FRM master)        use
+;			2: SND_SOC_DAIFMT_CBS_CFM(codec clk slave & FRM master)  not use
+;			3: SND_SOC_DAIFMT_CBM_CFS(codec clk master & frame slave) not use
+;			4: SND_SOC_DAIFMT_CBS_CFS(codec clk & FRM slave)         use
+;pcm_select:1 is pcm.0 is i2s
+;audio_format: 1:SND_SOC_DAIFMT_I2S(standard i2s format).            use
+;			   2:SND_SOC_DAIFMT_RIGHT_J(right justfied format).
+;			   3:SND_SOC_DAIFMT_LEFT_J(left justfied format)
+;			   4:SND_SOC_DAIFMT_DSP_A(pcm. MSB is available on 2nd BCLK rising edge after LRC rising edge). use
+;			   5:SND_SOC_DAIFMT_DSP_B(pcm. MSB is available on 1nd BCLK rising edge after LRC rising edge)
+;signal_inversion:1:SND_SOC_DAIFMT_NB_NF(normal bit clock + frame)  use
+;				  2:SND_SOC_DAIFMT_NB_IF(normal BCLK + inv FRM)
+;				  3:SND_SOC_DAIFMT_IB_NF(invert BCLK + nor FRM)  use
+;				  4:SND_SOC_DAIFMT_IB_IF(invert BCLK + FRM)
+;over_sample_rate: support 128fs/192fs/256fs/384fs/512fs/768fs
+;sample_resolution	:16bits/20bits/24bits
+;word_select_size 	:16bits/20bits/24bits/32bits
+;pcm_sync_period 	:16/32/64/128/256
+;msb_lsb_first 		:0: msb first; 1: lsb first
+;sign_extend 		:0: zero pending; 1: sign extend
+;slot_index 		:slot index: 0: the 1st slot - 3: the 4th slot
+;slot_width 		:8 bit width / 16 bit width
+;frame_width 		:0: long frame = 2 clock width;  1: short frame
+;tx_data_mode 		:0: 16bit linear PCM; 1: 8bit linear PCM; 2: 8bit u-law; 3: 8bit a-law
+;rx_data_mode 		:0: 16bit linear PCM; 1: 8bit linear PCM; 2: 8bit u-law; 3: 8bit a-law
+;--------------------------------------------------------------------------------
 [pcm_para]
 pcm_used            = 1
 pcm_channel         = 2
+pcm_master			= 4
+pcm_select  		= 1
+audio_format		= 4
+signal_inversion	= 3
+over_sample_rate	= 512
+sample_resolution   = 16
+word_select_size 	= 32
+pcm_sync_period 	= 64
+msb_lsb_first 	    = 0
+sign_extend 		= 0
+slot_index 		    = 0
+slot_width 		    = 16
+frame_width 		= 1
+tx_data_mode 		= 0
+rx_data_mode 		= 0
 pcm_mclk            =
 pcm_bclk            = port:PG13<3><1><default><default>
 pcm_lrclk           = port:PG14<3><1><default><default>
@@ -956,7 +1144,7 @@ spdif_din           = port:PH27<3><1><default><default>
 audio_used          	= 1
 headphone_vol			= 0x3b
 cap_vol					= 0x5
-pa_single_vol			= 0x1b
+pa_single_vol			= 0x19
 pa_double_used			= 0
 pa_double_vol			= 0x1f
 headphone_direct_used	= 0
@@ -974,7 +1162,7 @@ ir_rx               = port:PL04<2><1><default><default>
 ;pmu_used                    ---0:not used,1:used
 ;pmu_twi_addr                ---slave address
 ;pmu_twi_id                  ---i2c bus number (0 TWI0, 1 TWI2, 2 TWI3)
-;pmu_irq_id                  ---irq number (0 irq0,1 irq1,……)
+;pmu_irq_id		     ---irq number (0 irq0,1 irq1,……)
 ;pmu_battery_rdc             ---battery initial resistance
 ;pmu_battery_cap             ---battery capability,mAh
 ;pmu_batdeten		     ---battery detect en;0:disable 1:enable
@@ -1033,7 +1221,7 @@ ir_rx               = port:PL04<2><1><default><default>
 ;pmu_pwron_vol               ---set protect voltage after system start up,mV,2600/2700/2800/2900/3000/3100/3200/3300
 ;pmu_pekoff_time             ---set pek off time,ms, 4000/6000/8000/10000
 ;pmu_pekoff_func             ---set pek off func, 0:shutdown,1:restart
-;pmu_pekoff_en               ---set pek offlevel powerdown or not, 0:not powerdown,1:powerdown
+;pmu_pekoff_en		     ---set pek offlevel powerdown or not, 0:not powerdown,1:powerdown
 ;pmu_peklong_time            ---set pek pek long irq time,ms,1000/1500/2000/2500
 ;pmu_pekon_time              ---set pek on time,ms,128/1000/2000/3000
 ;pmu_pwrok_time              ---set pmu pwrok delay time,ms,8/16/32/64
@@ -1043,11 +1231,11 @@ ir_rx               = port:PL04<2><1><default><default>
 ;pmu_ocv_cou_adjust_time     ---ocv battery indication reflash time,60/120/30
 ;pmu_chgled_func             ---CHGKED pin control，0:controlled by pmu,1:controlled by Charger
 ;pmu_chgled_type             ---CHGLED Type select when pmu_chgled_func=0,0:Type A，1：Type B
-;pmu_vbusen_func             ---N_VBUSEN function select,0:as an output,1:as an input
+;pmu_vbusen_func	     ---N_VBUSEN function select,0:as an output,1:as an input
 ;pmu_reset                   ---when power key press longer than 16's,PMU reset or not.0:not reset 1:reset
-;pmu_IRQ_wakeup	             ---press IRQ wakeup or not when sleep or power down.0:not wakeup 1:wakeup
+;pmu_IRQ_wakeup		     ---press IRQ wakeup or not when sleep or power down.0:not wakeup 1:wakeup
 ;pmu_hot_shutdowm            ---when PMU over temperature protect or not;0:disable 1:enable
-;pmu_inshort                 ---ACIN and VBUS inshort or not by software;0:auto detect 1:inshort
+;pmu_inshort		     ---ACIN and VBUS inshort or not by software;0:auto detect 1:inshort
 ;--------------------------------------------------------------------------------------------------------
 [pmu_para]
 pmu_used                   = 1
@@ -1131,6 +1319,10 @@ pmu_hot_shutdowm           = 1
 pmu_inshort                = 0
 power_start                = 0
 
+[recovery_key]
+key_min			=28
+key_max			=32
+
 ;----------------------------------------------------------------------------------
 ; dvfs voltage-frequency table configuration
 ;
@@ -1151,7 +1343,7 @@ power_start                = 0
 ;----------------------------------------------------------------------------------
 [dvfs_table]
 max_freq = 1008000000
-min_freq = 384000000
+min_freq = 120000000
 
 LV_count = 8
 
@@ -1178,3 +1370,12 @@ LV7_volt = 1000
 
 LV8_freq = 0
 LV8_volt = 1000
+
+;----------------------------------------------------------------------------------
+;cpus config parameters
+;cpus_uart_debug_used  --r_uart whether used for cpus debugging
+;
+;----------------------------------------------------------------------------------
+[cpus_config_paras]
+cpus_uart_debug_used = 1
+

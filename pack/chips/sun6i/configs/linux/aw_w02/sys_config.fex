@@ -6,14 +6,10 @@
 
 [product]
 version = "100"
-machine = "onda_m809q9"
+machine = "w02"
 
 [platform]
-eraseflag   = 0
-
-[fel_key]
-fel_key_type = 1
-
+eraseflag   = 1
 ;----------------------------------------------------------------------------------
 ;   system configuration
 ;   ?
@@ -32,7 +28,7 @@ storage_type    = -1
 [power_sply]
 dcdc1_vol                  = 3000
 dcdc2_vol                  = 1200
-dcdc3_vol                  = 1260
+dcdc3_vol                  = 1200
 dcdc4_vol                  = 1200
 dcdc5_vol                  = 1500
 aldo2_vol                  = 1800
@@ -93,16 +89,16 @@ pll4            = 300
 pll6            = 600
 pll8            = 360
 pll9            = 297
-pll10           = 702
+pll10           = 264
 
 ;*****************************************************************************
 ;sdram configuration
 ;
 ;*****************************************************************************
 [dram_para]
-dram_clk        = 312
+dram_clk        = 288
 dram_type       = 3
-dram_zq         = 0xFB
+dram_zq         = 0x17b
 dram_odt_en     = 0
 dram_para1      = 0x10F40800
 dram_para2      = 0x1211
@@ -296,18 +292,6 @@ spi_miso       = port:PA24<4><default><default><default>
 spi_cs1        = port:PA25<4><default><default><default>
 
 ;----------------------------------------------------------------------------------
-;resistance tp configuration
-;----------------------------------------------------------------------------------
-[rtp_para]
-rtp_used                   = 0
-rtp_screen_size            = 5
-rtp_regidity_level         = 5
-rtp_press_threshold_enable = 0
-rtp_press_threshold        = 0x1f40
-rtp_sensitive_level        = 0xf
-rtp_exchange_x_y_flag      = 0
-
-;----------------------------------------------------------------------------------
 ;capacitor tp configuration
 ;external int function
 ;wakeup output function
@@ -315,18 +299,16 @@ rtp_exchange_x_y_flag      = 0
 ;----------------------------------------------------------------------------------
 [ctp_para]
 ctp_used            = 1
-ctp_name            = "gsl2680"
 ctp_twi_id          = 1
 ctp_twi_addr        = 0x40
-ctp_screen_max_x    = 1024
-ctp_screen_max_y    = 768
-ctp_revert_x_flag   = 0
-ctp_revert_y_flag   = 1
+ctp_screen_max_x    = 2048
+ctp_screen_max_y    = 1536
+ctp_revert_x_flag   = 1
+ctp_revert_y_flag   = 0
 ctp_exchange_x_y_flag = 1
 
 ctp_int_port        = port:PA03<6><default><default><default>
 ctp_wakeup          = port:PA02<1><default><default><1>
-
 ;----------------------------------------------------------------------------------
 ;touch key configuration
 ;----------------------------------------------------------------------------------
@@ -341,7 +323,7 @@ tkey_int            =
 ;----------------------------------------------------------------------------------
 [motor_para]
 motor_used          = 1
-motor_shake         = port:power3<1><default><default><1>
+motor_shake         =
 
 [nand0_para]
 nand_support_2ch    = 1
@@ -455,44 +437,45 @@ lcd1_hue                 = 50
 ;lcd_vt:               vysnc total cycle
 ;lcd_hspw:             hsync plus width
 ;lcd_vspw:             vysnc plus width
-;lcd_lvds_if:          0:single link;  1:dual link
-;lcd_lvds_colordepth:  0:8bit; 1:6bit
-;lcd_lvds_mode:        0:NS mode; 1:JEIDA mode
-;lcd_lvds_io_polarity: 0:normal; 1:pn cross
+;lcd_edp_tx_ic         0:anx9804;  1:anx6345
+;lcd_edp_tx_rate       1:1.62G;   2:2.7G;    3:5.4G
+;lcd_edp_tx_lane       1/2/4lane
 ;lcd_frm:              0:disable; 1:enable rgb666 dither; 2:enable rgb656 dither
 ;lcd_io_phase:         0:noraml; 1:intert phase(0~3bit: vsync phase; 4~7bit:hsync phase;
 ;                      8~11bit:dclk phase; 12~15bit:de phase)
 ;lcd_gamma_en          lcd gamma correction enable
 ;lcd_bright_curve_en   lcd bright curve correction enable
 ;lcd_cmap_en           lcd color map function enable
+;lcd_gpio_scl:         iic SCL
+;lcd_gpio_sda          iic SDA
+;lcd_gpio_0/1/2/3      lcd gpio
 ;deu_mode              0:smoll lcd screen; 1:large lcd screen(larger than 10inch)
 ;lcdgamma4iep:         Smart Backlight parameter, lcd gamma vale * 10;
 ;                      decrease it while lcd is not bright enough; increase while lcd is too bright
-;smart_color           90:normal lcd screen 65:retina lcd screen(9.7inch)
+;smart_color          90:normal lcd screen 65:retina lcd screen(9.7inch)
 ;----------------------------------------------------------------------------------
 [lcd0_para]
 lcd_used            = 1
 
-lcd_if              = 3
-lcd_x               = 1024
-lcd_y               = 768
-lcd_width           = 162
-lcd_height          = 121
-lcd_dclk_freq       = 65
+lcd_if              = 5
+lcd_x               = 2048
+lcd_y               = 1536
+lcd_width           = 196
+lcd_height          = 147
+lcd_dclk_freq       = 205
 lcd_pwm_freq        = 50000
 lcd_pwm_pol         = 1
 lcd_pwm_max_limit   = 150
-lcd_hbp             = 300
-lcd_ht              = 1344
-lcd_hspw            = 20
-lcd_vbp             = 30
-lcd_vt              = 806
-lcd_vspw            = 8
-lcd_lvds_if         = 0
-lcd_lvds_colordepth = 1
-lcd_lvds_mode       = 0
-lcd_lvds_io_polarity= 0
-lcd_frm             = 1
+lcd_hbp             = 10
+lcd_ht              = 2208
+lcd_hspw            = 5
+lcd_vbp             = 10
+lcd_vt              = 1549
+lcd_vspw            = 1
+lcd_frm             = 0
+lcd_edp_tx_ic       = 0
+lcd_edp_tx_rate     = 1
+lcd_edp_tx_lane     = 4
 lcd_io_phase        = 0x0000
 lcd_gamma_en        = 0
 lcd_bright_curve_en = 1
@@ -500,22 +483,44 @@ lcd_cmap_en         = 0
 
 deu_mode            = 0
 lcdgamma4iep        = 22
-smart_color        = 90
+smart_color         = 65
 
 lcd_bl_en           = port:PA25<1><0><default><1>
 lcd_power           = port:power2<1><0><default><1>
 lcd_pwm             = port:PH13<2><0><default><default>
 
-lcdd0               = port:PD00<3><0><3><default>
-lcdd1               = port:PD01<3><0><3><default>
-lcdd2               = port:PD02<3><0><3><default>
-lcdd3               = port:PD03<3><0><3><default>
-lcdd4               = port:PD04<3><0><3><default>
-lcdd5               = port:PD05<3><0><3><default>
-lcdd6               = port:PD06<3><0><3><default>
-lcdd7               = port:PD07<3><0><3><default>
-lcdd8               = port:PD08<3><0><3><default>
-lcdd9               = port:PD09<3><0><3><default>
+lcd_gpio_scl        = port:PA20<0><0><default><default>
+lcd_gpio_sda        = port:PA19<0><0><default><default>
+lcd_gpio_0          = port:PA23<0><0><default><default>
+
+lcdd0               = port:PD00<2><0><3><default>
+lcdd1               = port:PD01<2><0><3><default>
+lcdd2               = port:PD02<2><0><3><default>
+lcdd3               = port:PD03<2><0><3><default>
+lcdd4               = port:PD04<2><0><3><default>
+lcdd5               = port:PD05<2><0><3><default>
+lcdd6               = port:PD06<2><0><3><default>
+lcdd7               = port:PD07<2><0><3><default>
+lcdd8               = port:PD08<2><0><3><default>
+lcdd9               = port:PD09<2><0><3><default>
+lcdd10              = port:PD10<2><0><3><default>
+lcdd11              = port:PD11<2><0><3><default>
+lcdd12              = port:PD12<2><0><3><default>
+lcdd13              = port:PD13<2><0><3><default>
+lcdd14              = port:PD14<2><0><3><default>
+lcdd15              = port:PD15<2><0><3><default>
+lcdd16              = port:PD16<2><0><3><default>
+lcdd17              = port:PD17<2><0><3><default>
+lcdd18              = port:PD18<2><0><3><default>
+lcdd19              = port:PD19<2><0><3><default>
+lcdd20              = port:PD20<2><0><3><default>
+lcdd21              = port:PD21<2><0><3><default>
+lcdd22              = port:PD22<2><0><3><default>
+lcdd23              = port:PD23<2><0><3><default>
+lcdclk              = port:PD24<2><0><3><default>
+lcdde               = port:PD25<2><0><3><default>
+lcdhsync            = port:PD26<2><0><3><default>
+lcdvsync            = port:PD27<2><0><3><default>
 
 ;----------------------------------------------------------------------------------
 ;hdmi configuration
@@ -555,27 +560,21 @@ csi_twi_id          = 0
 csi_twi_addr        = 0x78
 csi_if              = 0
 csi_vflip           = 0
-csi_hflip           = 1
-csi_iovdd           = "axp22_dldo3"
-csi_avdd            = "axp22_dldo4"
-csi_dvdd            = "axp22_eldo1"
-csi_vol_iovdd       = 2800
-csi_vol_avdd        = 2800
-csi_vol_dvdd        = 1500
+csi_hflip           = 0
+csi_iovdd           = "axp22_ldo11"
+csi_avdd            = "axp22_ldo8"
+csi_dvdd            = "axp22_ldo9"
 csi_flash_pol       = 1
 
-csi_mname_b         = "gc0307"
+csi_mname_b         = "gc0308"
 csi_twi_id_b        = 0
 csi_twi_addr_b      = 0x42
 csi_if_b            = 0
-csi_vflip_b         = 1
+csi_vflip_b         = 0
 csi_hflip_b         = 1
-csi_iovdd_b         = "axp22_dldo3"
-csi_avdd_b          = "axp22_dldo4"
-csi_dvdd_b          = "axp22_eldo2"
-csi_vol_iovdd_b     = 2800
-csi_vol_avdd_b      = 2800
-csi_vol_dvdd_b      = 1800
+csi_iovdd_b         = "axp22_ldo11"
+csi_avdd_b          = "axp22_ldo8"
+csi_dvdd_b          = "axp22_ldo10"
 csi_flash_pol_b     = 1
 
 csi_pck             = port:PE00<2><default><default><default>
@@ -808,6 +807,7 @@ luns                = 2
 gsensor_used        = 1
 gsensor_twi_id      = 2
 gsensor_twi_addr    = 0x18
+gsensor_use_int     = 0
 gsensor_int1        = port:PA09<6><1><default><default>
 gsensor_int2        =
 
@@ -823,7 +823,6 @@ gsensor_int2        =
 ;wifi configuration
 ;wifi_sdc_id    ---  0- SDC0, 1- SDC1, 2- SDC2, 3- SDC3
 ;wifi_usbc_id  ---  0- USB0, 1- USB1, 2- USB2
-;wifi_usbc_type --  1- EHCI(speed 2.0), 2- OHCI(speed 1.0)
 ;wifi_mod_sel   ---  0- none, 1- bcm40181, 2- bcm40183(wifi+bt),
 ;                    3 - rtl8723as(wifi+bt), 4- rtl8189es(SM89E00),
 ;                    5 - rtl8192cu, 6 - rtl8188eu
@@ -832,21 +831,23 @@ gsensor_int2        =
 wifi_used          = 1
 wifi_sdc_id        = 1
 wifi_usbc_id       = 1
-wifi_usbc_type     = 1
 wifi_mod_sel       = 6
-wifi_power         = "axp22_aldo1"
 
 ; 1 - bcm40181 sdio wifi gpio config
+;bcm40181_vdd_en        = port:PG18<1><default><default><0>
+;bcm40181_vcc_en        = port:PG18<1><default><default><0>
 ;bcm40181_shdn          = port:PG10<1><default><default><0>
 ;bcm40181_host_wake     = port:PG12<0><default><default><0>
 
 ; 2 - bcm40183 sdio wifi gpio config
+;bcm40183_vdd_en        = port:PG18<1><default><default><0>
+;bcm40183_vcc_en        = port:PG18<1><default><default><0>
 ;bcm40183_wl_regon      = port:PG10<1><default><default><0>
 ;bcm40183_wl_host_wake  = port:PG12<0><default><default><0>
 ;bcm40183_bt_rst        = port:PG11<1><default><default><0>
 ;bcm40183_bt_regon      = port:PG11<1><default><default><0>
-;bcm40183_bt_wake       = port:PG17<1><default><default><0>
-;bcm40183_bt_host_wake  = port:PG18<0><default><default><0>
+;bcm40183_bt_wake       = port:XXX<1><default><default><0>
+;bcm40183_bt_host_wake  = port:XXX<0><default><default><0>
 
 ; 3 - rtl8723as sdio wifi + bt gpio config
 ;rtk_rtl8723as_wl_dis       = port:PG10<1><default><default><0>
@@ -855,8 +856,16 @@ wifi_power         = "axp22_aldo1"
 ;rtk_rtl8723as_bt_host_wake = port:PG17<0><default><default><0>
 
 ; 4 - rtl8189es sdio wifi gpio config
+;rtl8189es_vdd_en       = port:PG18<1><default><default><0>
+;rtl8189es_vcc_en       = port:PG18<1><default><default><0>
 ;rtl8189es_shdn         = port:PG10<1><default><default><0>
 ;rtl8189es_wakeup       = port:PG12<1><default><default><1>
+
+; 5 - rtl8192cu usb wifi gpio config
+;rtl8192cu_power    = port:PH27<1><0><default><0>
+
+; 6 - rtl8188eu usb wifi gpio conifg
+;rtl8188eu_power    = port:PH27<1><0><default><0>
 
 ;--------------------------------------------------------------------------------
 ;3G configuration
@@ -944,6 +953,21 @@ bt_rst              =
 [i2s_para]
 i2s_used            = 1
 i2s_channel         = 2
+i2s_master			= 1
+i2s_select  		= 0
+audio_format		= 4
+signal_inversion	= 3
+over_sample_rate	= 256
+sample_resolution   = 16
+word_select_size 	= 32
+pcm_sync_period 	= 256
+msb_lsb_first 	    = 0
+sign_extend 		= 0
+slot_index 		    = 0
+slot_width 		    = 16
+frame_width 		= 1
+tx_data_mode 		= 0
+rx_data_mode 		= 0
 i2s_mclk            =
 i2s_bclk            = port:PB01<2><1><default><default>
 i2s_lrclk           = port:PB02<2><1><default><default>
@@ -983,6 +1007,21 @@ i2s_din             = port:PB07<2><1><default><default>
 [pcm_para]
 pcm_used            = 1
 pcm_channel         = 2
+pcm_master			= 4
+pcm_select  		= 1
+audio_format		= 4
+signal_inversion	= 3
+over_sample_rate	= 512
+sample_resolution   = 16
+word_select_size 	= 32
+pcm_sync_period 	= 64
+msb_lsb_first 	    = 0
+sign_extend 		= 0
+slot_index 		    = 0
+slot_width 		    = 16
+frame_width 		= 1
+tx_data_mode 		= 0
+rx_data_mode 		= 0
 pcm_mclk            =
 pcm_bclk            = port:PG13<3><1><default><default>
 pcm_lrclk           = port:PG14<3><1><default><default>
@@ -1001,11 +1040,12 @@ spdif_din           = port:PH27<3><1><default><default>
 audio_used          	= 1
 headphone_vol			= 0x3b
 cap_vol					= 0x5
-pa_single_vol			= 0x19
+pa_single_vol			= 0x1b
 pa_double_used			= 0
 pa_double_vol			= 0x1f
 headphone_direct_used	= 0
 audio_pa_ctrl       	= port:PA18<1><default><default><0>
+
 ;----------------------------------------------------------------------------------
 ;ir --- infra remote configuration
 ;----------------------------------------------------------------------------------
@@ -1018,7 +1058,7 @@ ir_rx               = port:PL04<2><1><default><default>
 ;pmu_used                    ---0:not used,1:used
 ;pmu_twi_addr                ---slave address
 ;pmu_twi_id                  ---i2c bus number (0 TWI0, 1 TWI2, 2 TWI3)
-;pmu_irq_id		     ---irq number (0 irq0,1 irq1,……)
+;pmu_irq_id                  ---irq number (0 irq0,1 irq1,……)
 ;pmu_battery_rdc             ---battery initial resistance
 ;pmu_battery_cap             ---battery capability,mAh
 ;pmu_batdeten		     ---battery detect en;0:disable 1:enable
@@ -1035,7 +1075,7 @@ ir_rx               = port:PL04<2><1><default><default>
 ;pmu_init_chg_csttime        ---set initial constance-charging time,min,360/480/600/720
 ;pmu_batt_cap_correct	     ---correct the battery capacity or not when one charge cycle 0:not correct 1:correct
 ;pmu_bat_regu_en			 ---bat regulator is enable or not when charge done 0:disable 1:enable
-;pmu_bat_para1				 ---battery indication at 3.13V
+;pmu_bat_para1 		     			 ---battery indication at 3.13V
 ;pmu_bat_para2               ---battery indication at 3.27V
 ;pmu_bat_para3               ---battery indication at 3.34V
 ;pmu_bat_para4               ---battery indication at 3.41V
@@ -1077,7 +1117,7 @@ ir_rx               = port:PL04<2><1><default><default>
 ;pmu_pwron_vol               ---set protect voltage after system start up,mV,2600/2700/2800/2900/3000/3100/3200/3300
 ;pmu_pekoff_time             ---set pek off time,ms, 4000/6000/8000/10000
 ;pmu_pekoff_func             ---set pek off func, 0:shutdown,1:restart
-;pmu_pekoff_en		     ---set pek offlevel powerdown or not, 0:not powerdown,1:powerdown
+;pmu_pekoff_en               ---set pek offlevel powerdown or not, 0:not powerdown,1:powerdown
 ;pmu_peklong_time            ---set pek pek long irq time,ms,1000/1500/2000/2500
 ;pmu_pekon_time              ---set pek on time,ms,128/1000/2000/3000
 ;pmu_pwrok_time              ---set pmu pwrok delay time,ms,8/16/32/64
@@ -1087,11 +1127,11 @@ ir_rx               = port:PL04<2><1><default><default>
 ;pmu_ocv_cou_adjust_time     ---ocv battery indication reflash time,60/120/30
 ;pmu_chgled_func             ---CHGKED pin control，0:controlled by pmu,1:controlled by Charger
 ;pmu_chgled_type             ---CHGLED Type select when pmu_chgled_func=0,0:Type A，1：Type B
-;pmu_vbusen_func	     ---N_VBUSEN function select,0:as an output,1:as an input
+;pmu_vbusen_func             ---N_VBUSEN function select,0:as an output,1:as an input
 ;pmu_reset                   ---when power key press longer than 16's,PMU reset or not.0:not reset 1:reset
-;pmu_IRQ_wakeup		     ---press IRQ wakeup or not when sleep or power down.0:not wakeup 1:wakeup
+;pmu_IRQ_wakeup	             ---press IRQ wakeup or not when sleep or power down.0:not wakeup 1:wakeup
 ;pmu_hot_shutdowm            ---when PMU over temperature protect or not;0:disable 1:enable
-;pmu_inshort		     ---ACIN and VBUS inshort or not by software;0:auto detect 1:inshort
+;pmu_inshort                 ---ACIN and VBUS inshort or not by software;0:auto detect 1:inshort
 ;--------------------------------------------------------------------------------------------------------
 [pmu_para]
 pmu_used                   = 1
@@ -1195,7 +1235,7 @@ power_start                = 0
 ;----------------------------------------------------------------------------------
 [dvfs_table]
 max_freq = 1008000000
-min_freq = 384000000
+min_freq = 120000000
 
 LV_count = 8
 
@@ -1222,3 +1262,12 @@ LV7_volt = 1000
 
 LV8_freq = 0
 LV8_volt = 1000
+
+;----------------------------------------------------------------------------------
+;cpus config parameters
+;cpus_uart_debug_used  --r_uart whether used for cpus debugging
+;
+;----------------------------------------------------------------------------------
+[cpus_config_paras]
+cpus_uart_debug_used = 1
+

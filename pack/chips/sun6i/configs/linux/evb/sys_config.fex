@@ -9,7 +9,7 @@ version = "100"
 machine = "evb"
 
 [platform]
-eraseflag   = 1
+eraseflag   = 0
 ;----------------------------------------------------------------------------------
 ;   system configuration
 ;   ?
@@ -650,7 +650,7 @@ sdc_isio          = 0
 sdc_regulator     = "none"
 
 [mmc1_para]
-sdc_used          = 0
+sdc_used          = 1
 sdc_detmode       = 4
 sdc_buswidth      = 4
 sdc_clk           = port:PG00<2><1><2><default>
@@ -820,7 +820,9 @@ gsensor_int2        =
 wifi_used          = 1
 wifi_sdc_id        = 1
 wifi_usbc_id       = 1
-wifi_mod_sel       = 5
+wifi_usbc_type     = 1
+wifi_mod_sel       = 3
+wifi_power         = "axp22_aldo1"
 
 ; 1 - bcm40181 sdio wifi gpio config
 ;bcm40181_vdd_en        = port:PG18<1><default><default><0>
@@ -912,9 +914,51 @@ bt_wakeup           =
 bt_gpio             =
 bt_rst              =
 
+;--------------------------------------------------------------------------------
+;i2s_master:1: SND_SOC_DAIFMT_CBM_CFM(codec clk & FRM master)        use
+;			2: SND_SOC_DAIFMT_CBS_CFM(codec clk slave & FRM master)  not use
+;			3: SND_SOC_DAIFMT_CBM_CFS(codec clk master & frame slave) not use
+;			4: SND_SOC_DAIFMT_CBS_CFS(codec clk & FRM slave)         use
+;i2s_select:0 is pcm.1 is i2s
+;audio_format: 1:SND_SOC_DAIFMT_I2S(standard i2s format).            use
+;			   2:SND_SOC_DAIFMT_RIGHT_J(right justfied format).
+;			   3:SND_SOC_DAIFMT_LEFT_J(left justfied format)
+;			   4:SND_SOC_DAIFMT_DSP_A(pcm. MSB is available on 2nd BCLK rising edge after LRC rising edge). use
+;			   5:SND_SOC_DAIFMT_DSP_B(pcm. MSB is available on 1nd BCLK rising edge after LRC rising edge)
+;signal_inversion:1:SND_SOC_DAIFMT_NB_NF(normal bit clock + frame)  use
+;				  2:SND_SOC_DAIFMT_NB_IF(normal BCLK + inv FRM)
+;				  3:SND_SOC_DAIFMT_IB_NF(invert BCLK + nor FRM)  use
+;				  4:SND_SOC_DAIFMT_IB_IF(invert BCLK + FRM)
+;over_sample_rate: support 128fs/192fs/256fs/384fs/512fs/768fs
+;sample_resolution	:16bits/20bits/24bits
+;word_select_size 	:16bits/20bits/24bits/32bits
+;pcm_sync_period 	:16/32/64/128/256
+;msb_lsb_first 		:0: msb first; 1: lsb first
+;sign_extend 		:0: zero pending; 1: sign extend
+;slot_index 		:slot index: 0: the 1st slot - 3: the 4th slot
+;slot_width 		:8 bit width / 16 bit width
+;frame_width 		:0: long frame = 2 clock width;  1: short frame
+;tx_data_mode 		:0: 16bit linear PCM; 1: 8bit linear PCM; 2: 8bit u-law; 3: 8bit a-law
+;rx_data_mode 		:0: 16bit linear PCM; 1: 8bit linear PCM; 2: 8bit u-law; 3: 8bit a-law
+;--------------------------------------------------------------------------------        
 [i2s_para]
 i2s_used            = 1
 i2s_channel         = 2
+i2s_master			= 1
+i2s_select  		= 0
+audio_format		= 4
+signal_inversion	= 3
+over_sample_rate	= 256
+sample_resolution   = 16
+word_select_size 	= 32
+pcm_sync_period 	= 256
+msb_lsb_first 	    = 0
+sign_extend 		= 0
+slot_index 		    = 0
+slot_width 		    = 16
+frame_width 		= 1
+tx_data_mode 		= 0
+rx_data_mode 		= 0
 i2s_mclk            =
 i2s_bclk            = port:PB01<2><1><default><default>
 i2s_lrclk           = port:PB02<2><1><default><default>
@@ -924,9 +968,51 @@ i2s_dout2           =
 i2s_dout3           =
 i2s_din             = port:PB07<2><1><default><default>
 
+;--------------------------------------------------------------------------------
+;pcm_master:1: SND_SOC_DAIFMT_CBM_CFM(codec clk & FRM master)        use
+;			2: SND_SOC_DAIFMT_CBS_CFM(codec clk slave & FRM master)  not use
+;			3: SND_SOC_DAIFMT_CBM_CFS(codec clk master & frame slave) not use
+;			4: SND_SOC_DAIFMT_CBS_CFS(codec clk & FRM slave)         use
+;pcm_select:1 is pcm.0 is i2s
+;audio_format: 1:SND_SOC_DAIFMT_I2S(standard i2s format).            use
+;			   2:SND_SOC_DAIFMT_RIGHT_J(right justfied format).
+;			   3:SND_SOC_DAIFMT_LEFT_J(left justfied format)
+;			   4:SND_SOC_DAIFMT_DSP_A(pcm. MSB is available on 2nd BCLK rising edge after LRC rising edge). use
+;			   5:SND_SOC_DAIFMT_DSP_B(pcm. MSB is available on 1nd BCLK rising edge after LRC rising edge)
+;signal_inversion:1:SND_SOC_DAIFMT_NB_NF(normal bit clock + frame)  use
+;				  2:SND_SOC_DAIFMT_NB_IF(normal BCLK + inv FRM)
+;				  3:SND_SOC_DAIFMT_IB_NF(invert BCLK + nor FRM)  use
+;				  4:SND_SOC_DAIFMT_IB_IF(invert BCLK + FRM)
+;over_sample_rate: support 128fs/192fs/256fs/384fs/512fs/768fs
+;sample_resolution	:16bits/20bits/24bits
+;word_select_size 	:16bits/20bits/24bits/32bits
+;pcm_sync_period 	:16/32/64/128/256
+;msb_lsb_first 		:0: msb first; 1: lsb first
+;sign_extend 		:0: zero pending; 1: sign extend
+;slot_index 		:slot index: 0: the 1st slot - 3: the 4th slot
+;slot_width 		:8 bit width / 16 bit width
+;frame_width 		:0: long frame = 2 clock width;  1: short frame
+;tx_data_mode 		:0: 16bit linear PCM; 1: 8bit linear PCM; 2: 8bit u-law; 3: 8bit a-law
+;rx_data_mode 		:0: 16bit linear PCM; 1: 8bit linear PCM; 2: 8bit u-law; 3: 8bit a-law
+;--------------------------------------------------------------------------------        
 [pcm_para]
 pcm_used            = 1
 pcm_channel         = 2
+pcm_master			= 4
+pcm_select  		= 1
+audio_format		= 4
+signal_inversion	= 3
+over_sample_rate	= 512
+sample_resolution   = 16
+word_select_size 	= 32
+pcm_sync_period 	= 64
+msb_lsb_first 	    = 0
+sign_extend 		= 0
+slot_index 		    = 0
+slot_width 		    = 16
+frame_width 		= 1
+tx_data_mode 		= 0
+rx_data_mode 		= 0
 pcm_mclk            =
 pcm_bclk            = port:PG13<3><1><default><default>
 pcm_lrclk           = port:PG14<3><1><default><default>
@@ -945,10 +1031,11 @@ spdif_din           = port:PH27<3><1><default><default>
 audio_used          	= 1
 headphone_vol			= 0x3b
 cap_vol					= 0x5
-pa_single_vol			= 0x1b
+pa_single_vol			= 0x19
 pa_double_used			= 0
 pa_double_vol			= 0x1f
 headphone_direct_used	= 0
+headset_mic_vol			= 0x5
 audio_pa_ctrl       	= port:PA18<1><default><default><0>
 
 ;----------------------------------------------------------------------------------
@@ -1140,7 +1227,7 @@ power_start                = 0
 ;----------------------------------------------------------------------------------
 [dvfs_table]
 max_freq = 1008000000
-min_freq = 384000000
+min_freq = 120000000
 
 LV_count = 8
 
@@ -1167,3 +1254,12 @@ LV7_volt = 1000
 
 LV8_freq = 0
 LV8_volt = 1000
+
+;----------------------------------------------------------------------------------
+;cpus config parameters
+;cpus_uart_debug_used  --r_uart whether used for cpus debugging
+;
+;----------------------------------------------------------------------------------
+[cpus_config_paras]
+cpus_uart_debug_used = 1
+
