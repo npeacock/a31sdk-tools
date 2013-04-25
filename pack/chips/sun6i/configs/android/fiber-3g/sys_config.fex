@@ -169,35 +169,27 @@ bb_wake_ap     		= port:PM00<6><default><default><0>
 ;   PA09  *     *      *    PA19   *    *      *  PA26~27  *    *      *       ;
 ;------------------------------------------------------------------------------;
 [gmac_para]
-gmac_used          = 0
-gmac_txd0          = port:PA00<2><default><default><default>
-gmac_txd1          = port:PA01<2><default><default><default>
-gmac_txd2          = port:PA02<2><default><default><default>
-gmac_txd3          = port:PA03<2><default><default><default>
-gmac_txd4          = port:PA04<2><default><default><default>
-gmac_txd5          = port:PA05<2><default><default><default>
-gmac_txd6          = port:PA06<2><default><default><default>
-gmac_txd7          = port:PA07<2><default><default><default>
-gmac_txclk         = port:PA08<2><default><default><default>
-gmac_txen          = port:PA09<2><default><default><default>
-gmac_gtxclk        = port:PA10<2><default><default><default>
-gmac_rxd0          = port:PA11<2><default><default><default>
-gmac_rxd1          = port:PA12<2><default><default><default>
-gmac_rxd2          = port:PA13<2><default><default><default>
-gmac_rxd3          = port:PA14<2><default><default><default>
-gmac_rxd4          = port:PA15<2><default><default><default>
-gmac_rxd5          = port:PA16<2><default><default><default>
-gmac_rxd6          = port:PA17<2><default><default><default>
-gmac_rxd7          = port:PA18<2><default><default><default>
-gmac_rxdv          = port:PA19<2><default><default><default>
-gmac_rxclk         = port:PA20<2><default><default><default>
-gmac_txerr         = port:PA21<2><default><default><default>
-gmac_rxerr         = port:PA22<2><default><default><default>
-gmac_col           = port:PA23<2><default><default><default>
-gmac_crs           = port:PA24<2><default><default><default>
-gmac_clkin         = port:PA25<2><default><default><default>
-gmac_mdc           = port:PA26<2><default><default><default>
-gmac_mdio          = port:PA27<2><default><default><default>
+gmac_used          = 1
+gmac_txd0          = port:PA00<2><default><3><default>
+gmac_txd1          = port:PA01<2><default><3><default>
+gmac_txd2          = port:PA02<2><default><3><default>
+gmac_txd3          = port:PA03<2><default><3><default>
+;gmac_txclk         = port:PA10<2><default><3><default>
+gmac_txen          = port:PA09<2><default><3><default>
+gmac_gtxclk        = port:PA10<2><default><3><default>
+gmac_rxd0          = port:PA11<2><default><3><default>
+gmac_rxd1          = port:PA12<2><default><3><default>
+gmac_rxd2          = port:PA13<2><default><3><default>
+gmac_rxd3          = port:PA14<2><default><3><default>
+gmac_rxdv          = port:PA19<2><default><3><default>
+gmac_rxclk         = port:PA20<2><default><3><default>
+;gmac_txerr         = port:PA21<2><default><3><default>
+;gmac_rxerr         = port:PA22<2><default><3><default>
+;gmac_col           = port:PA23<2><default><3><default>
+;gmac_crs           = port:PA24<2><default><3><default>
+gmac_clkin         = port:PA25<2><default><3><default>
+gmac_mdc           = port:PA26<2><default><3><default>
+gmac_mdio          = port:PA27<2><default><3><default>
 
 ;----------------------------------------------------------------------------------
 ;i2c configuration
@@ -340,15 +332,15 @@ rtp_exchange_x_y_flag = 0
 [ctp_para]
 ctp_used            = 1
 ctp_twi_id          = 1
-ctp_twi_addr        = 0x5d
-ctp_screen_max_x    = 1280
-ctp_screen_max_y    = 800
+ctp_twi_addr        = 0x70
+ctp_screen_max_x    = 2048
+ctp_screen_max_y    = 1536
 ctp_revert_x_flag   = 1
 ctp_revert_y_flag   = 1
-ctp_exchange_x_y_flag = 1
+ctp_exchange_x_y_flag = 0
 
-ctp_int_port        = port:PA03<6><default><default><default>
-ctp_wakeup          = port:PA02<1><default><default><1>
+ctp_int_port        = port:PG11<6><default><default><default>
+ctp_wakeup          = port:PG10<1><default><3><1>
 ;----------------------------------------------------------------------------------
 ;touch key configuration
 ;----------------------------------------------------------------------------------
@@ -369,6 +361,7 @@ motor_shake         = port:power3<1><default><default><1>
 nand_support_2ch    = 1
 
 nand0_used          = 1
+good_block_ratio    = 944
 nand0_we            = port:PC00<2><default><default><default>
 nand0_ale           = port:PC01<2><default><default><default>
 nand0_cle           = port:PC02<2><default><default><default>
@@ -492,44 +485,70 @@ lcd1_hue                 = 50
 [lcd0_para]
 lcd_used            = 1
 
-lcd_if              = 3
-lcd_x               = 1280
-lcd_y               = 800
-lcd_width           = 150
-lcd_height          = 94
-lcd_dclk_freq       = 70
+lcd_if              = 5
+lcd_x               = 2048
+lcd_y               = 1536
+lcd_width           = 196
+lcd_height          = 147
+lcd_dclk_freq       = 208
 lcd_pwm_freq        = 50000
-lcd_pwm_pol         = 0
-lcd_hbp             = 20
-lcd_ht              = 1418
-lcd_hspw            = 10
+lcd_pwm_pol         = 1
+lcd_pwm_max_limit   = 150
+lcd_hbp             = 10
+lcd_ht              = 2208
+lcd_hspw            = 5
 lcd_vbp             = 10
-lcd_vt              = 814
-lcd_vspw            = 5
-lcd_lvds_if         = 0
-lcd_lvds_colordepth = 1
-lcd_lvds_mode       = 0
-lcd_frm             = 1
+lcd_vt              = 1570
+lcd_vspw            = 1
+lcd_frm             = 0
+lcd_edp_tx_ic       = 0
+lcd_edp_tx_rate     = 1
+lcd_edp_tx_lane     = 4
+lcd_io_phase        = 0x0000
 lcd_gamma_en        = 0
-lcd_bright_curve_en = 0
+lcd_bright_curve_en = 1
 lcd_cmap_en         = 0
 
 deu_mode            = 0
 lcdgamma4iep        = 22
-smart_color        = 90
+smart_color         = 65
 
-lcd_bl_en           = port:PA25<1><0><default><1>
+lcd_bl_en           = port:PM01<1><default><default><1>
 lcd_power           = port:power2<1><0><default><1>
 lcd_pwm             = port:PH13<2><0><default><default>
 
-lcdd0               = port:PD00<3><0><default><default>
-lcdd1               = port:PD01<3><0><default><default>
-lcdd2               = port:PD02<3><0><default><default>
-lcdd3               = port:PD03<3><0><default><default>
-lcdd4               = port:PD04<3><0><default><default>
-lcdd5               = port:PD05<3><0><default><default>
-lcdd6               = port:PD06<3><0><default><default>
-lcdd7               = port:PD07<3><0><default><default>
+lcd_gpio_scl        = port:PA24<0><0><default><default>
+lcd_gpio_sda        = port:PA23<0><0><default><default>
+;lcd_gpio_0          = port:PA23<0><0><default><default>
+
+lcdd0               = port:PD00<2><0><3><default>
+lcdd1               = port:PD01<2><0><3><default>
+lcdd2               = port:PD02<2><0><3><default>
+lcdd3               = port:PD03<2><0><3><default>
+lcdd4               = port:PD04<2><0><3><default>
+lcdd5               = port:PD05<2><0><3><default>
+lcdd6               = port:PD06<2><0><3><default>
+lcdd7               = port:PD07<2><0><3><default>
+lcdd8               = port:PD08<2><0><3><default>
+lcdd9               = port:PD09<2><0><3><default>
+lcdd10              = port:PD10<2><0><3><default>
+lcdd11              = port:PD11<2><0><3><default>
+lcdd12              = port:PD12<2><0><3><default>
+lcdd13              = port:PD13<2><0><3><default>
+lcdd14              = port:PD14<2><0><3><default>
+lcdd15              = port:PD15<2><0><3><default>
+lcdd16              = port:PD16<2><0><3><default>
+lcdd17              = port:PD17<2><0><3><default>
+lcdd18              = port:PD18<2><0><3><default>
+lcdd19              = port:PD19<2><0><3><default>
+lcdd20              = port:PD20<2><0><3><default>
+lcdd21              = port:PD21<2><0><3><default>
+lcdd22              = port:PD22<2><0><3><default>
+lcdd23              = port:PD23<2><0><3><default>
+lcdclk              = port:PD24<2><0><3><default>
+lcdde               = port:PD25<2><0><3><default>
+lcdhsync            = port:PD26<2><0><3><default>
+lcdvsync            = port:PD27<2><0><3><default>
 
 ;----------------------------------------------------------------------------------
 ;hdmi configuration
@@ -639,8 +658,8 @@ vip_csi_hsync            = port:PE02<2><default><default><default>
 vip_csi_vsync            = port:PE03<2><default><default><default>
 vip_csi_d0               = 
 vip_csi_d1               = 
-vip_csi_d2               = port:PE06<2><default><default><default>
-vip_csi_d3               = port:PE07<2><default><default><default>
+vip_csi_d2               = 
+vip_csi_d3               = 
 vip_csi_d4               = port:PE08<2><default><default><default>
 vip_csi_d5               = port:PE09<2><default><default><default>
 vip_csi_d6               = port:PE10<2><default><default><default>
@@ -650,11 +669,11 @@ vip_csi_d9               = port:PE13<2><default><default><default>
 vip_csi_d10              = port:PE14<2><default><default><default>
 vip_csi_d11              = port:PE15<2><default><default><default>
 
-vip_dev0_mname           = "ov5647"
+vip_dev0_mname           = "s5k4ec"
 vip_dev0_twi_id          = 0
-vip_dev0_twi_addr        = 0x6c
-vip_dev0_isp_used        = 1
-vip_dev0_fmt             = 1
+vip_dev0_twi_addr        = 0x5a
+vip_dev0_isp_used        = 0
+vip_dev0_fmt             = 0
 vip_dev0_stby_mode       = 0
 vip_dev0_vflip           = 0
 vip_dev0_hflip           = 1
@@ -667,19 +686,19 @@ vip_dev0_dvdd_vol        = 1500000
 vip_dev0_afvdd           = ""
 vip_dev0_afvdd_vol       = 2800000
 vip_dev0_power_en        = 
-vip_dev0_reset           = port:PH22<1><default><default><0>
-vip_dev0_pwdn            = port:PH23<1><default><default><1>
+vip_dev0_reset           = port:PE04<1><default><default><0>
+vip_dev0_pwdn            = port:PE05<1><default><default><1>
 vip_dev0_flash_en        =
 vip_dev0_flash_mode      =
 vip_dev0_af_pwdn         =
 
  
-vip_dev0_act_used        = 1
-vip_dev0_act_name        = "ad5820_act"
-vip_dev0_act_slave       = 0x18
+vip_dev0_act_used        = 0
+vip_dev0_act_name        = ""
+vip_dev0_act_slave       = 0x5a
 
 
-vip_dev1_mname           = "gc2035"
+vip_dev1_mname           = ""
 vip_dev1_twi_id          = 0
 vip_dev1_twi_addr        = 0x78
 vip_dev1_stby_mode       = 0
@@ -845,8 +864,8 @@ usb_used            = 1
 usb_port_type       = 2
 usb_detect_type     = 1
 usb_id_gpio         = port:PA15<0><1><default><default>
-usb_det_vbus_gpio   = port:PA14<0><0><default><default>
-usb_drv_vbus_gpio   = port:PA13<1><0><default><0>
+usb_det_vbus_gpio   = port:PA17<0><0><default><default>
+usb_drv_vbus_gpio   = port:PA16<1><0><default><0>
 usb_restrict_gpio   = port:PH26<1><0><default><0>
 usb_host_init_state = 0
 usb_restric_flag    = 0
@@ -876,7 +895,7 @@ usb_port_type       = 1
 usb_detect_type     = 0
 usb_id_gpio         =
 usb_det_vbus_gpio   =
-usb_drv_vbus_gpio   =
+usb_drv_vbus_gpio   =port:PH24<1><0><default><0>
 usb_restrict_gpio   =
 usb_host_init_state = 1
 usb_restric_flag    = 0
@@ -911,6 +930,39 @@ gsensor_twi_addr    = 0x18
 gsensor_int1        = port:PA09<6><1><default><default>
 gsensor_int2        =
 
+;hanbiao 20130103 add start 
+;--------------------------------------------------------------------------------
+; ch7026  configuration
+; ch_twi_id	---  TWI ID for controlling Gsensor (0: TWI0, 1: TWI1, 2: TWI2)
+;--------------------------------------------------------------------------------
+[ch7026_para]
+ch7026_used        = 1
+ch7026_twi_id      = 1
+ch7026_twi_addr    = 0x76
+ch7026_en		  = port:PH25<1><default><default><1>
+ch7026_reset  = port:PH26<1><default><default><1>
+ch7026_v1p8   = "axp22_eldo2"
+
+;--------------------------------------------------------------------------------
+; tw2866  configuration
+; tw_twi_id	---  TWI ID for controlling Gsensor (0: TWI0, 1: TWI1, 2: TWI2)
+;--------------------------------------------------------------------------------
+[tw2866_para]
+tw2866_used        = 1
+tw2866_twi_id      = 2
+tw2866_twi_addr    = 0x28
+
+;--------------------------------------------------------------------------------
+; sn7325  configuration
+; tw_twi_id	---  TWI ID for controlling Gsensor (0: TWI0, 1: TWI1, 2: TWI2)
+;--------------------------------------------------------------------------------
+[sn7325_para]
+sn7325_used        = 0
+sn7325_twi_id      = 2
+sn7325_twi_addr    = 0x58
+
+;hanbiao 20130103 add end 
+
 ;--------------------------------------------------------------------------------
 ; gps gpio configuration
 ; gps_spi_id		--- the index of SPI controller. 0: SPI0, 1: SPI1, 2: SPI2, 15: no SPI used
@@ -933,7 +985,7 @@ wifi_used          = 1
 wifi_sdc_id        = 1
 wifi_usbc_id       = 1
 wifi_usbc_type     = 1
-wifi_mod_sel       = 3
+wifi_mod_sel       = 7
 wifi_power         = "axp22_aldo1"
 
 ; 1 - ap6181 sdio wifi gpio config
@@ -962,11 +1014,11 @@ rtk_rtl8723as_bt_host_wake = port:PG17<0><default><default><0>
 ; 6 - rtl8188eu usb wifi
 
 ; 7 - mt6620 sdio+uart wifi+bt+gps+fm gpio config
-;mtk_6620_ldo      = port:PL04<1><default><default><0>
-;mtk_6620_pmu_en   = port:PL05<1><default><default><0>
-;mtk_6620_sys_rst  = port:PL08<1><default><default><0>
-;mtk_6620_wifi_int = port:PL06<6><1><default><default>
-;mtk_6620_bgf_int  = port:PL07<6><1><default><default>
+mtk_6620_ldo      = port:PL03<1><default><default><0>
+mtk_6620_pmu_en   = port:PL08<1><default><default><0>
+mtk_6620_sys_rst  = port:PL07<1><default><default><0>
+mtk_6620_wifi_int = port:PL05<6><1><default><default>
+mtk_6620_bgf_int  = port:PL06<6><1><default><default>
 
 ;--------------------------------------------------------------------------------
 ;3G configuration
@@ -984,21 +1036,19 @@ rtk_rtl8723as_bt_host_wake = port:PG17<0><default><default><0>
 ;bb_rf_dis		= port:PM05<1><default><default><0>
 ;bb_rst			= port:PM06<1><default><default><0>
 ;bb_dldo			=
-;bb_dldo_min_uV	=
-;bb_dldo_max_uV	=
 
 [3g_para]
 3g_used			= 1
 3g_usbc_num		= 2
-3g_usbc_type	= 2
-3g_uart_num		=
-bb_name			= "mu509"
+;3g_usbc_type	= 2
+3g_uart_num		= 0
+bb_name			= "cwm600"
 bb_vbat			= port:PL03<1><default><default><0>
-bb_on			= port:PM01<1><default><default><0>
-bb_pwr_on		= port:PM03<1><default><default><1>
+;bb_on			= port:PM01<1><default><default><0>
+bb_pwr_on		= port:PM03<1><default><default><0>
 bb_wake			= port:PM04<1><default><default><1>
-bb_rf_dis		= port:PM05<1><default><default><0>
-bb_rst			= port:PM06<1><default><default><1>
+;bb_rf_dis		= port:PM05<1><default><default><0>
+bb_rst			= port:PM06<1><default><default><0>
 bb_dldo			=
 bb_dldo_min_uV	=
 bb_dldo_max_uV	=
@@ -1023,7 +1073,7 @@ bb_dldo_max_uV	=
 ;gyroscope
 ;--------------------------------------------------------------------------------
 [gy_para]
-gy_used             = 1
+gy_used             = 0
 gy_twi_id           = 2
 gy_twi_addr         = 0x6a
 gy_int1             = port:PA10<6><1><default><default>
