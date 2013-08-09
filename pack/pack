@@ -10,6 +10,7 @@ PACK_BOARD="sun6i"
 PACK_BOOT="nand"
 PACK_FUNC="android"
 PACK_DEBUG="uart0"
+#CRANE_IMAGE_OUT="../../../android4.1/out/target/product/fiber-evb"
 
 export PATH=${TOOLS_DIR}/mod_update:${TOOLS_DIR}/eDragonEx:${TOOLS_DIR}/fsbuild200:${TOOLS_DIR}/android:$PATH
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${TOOLS_DIR}/libs
@@ -220,7 +221,20 @@ do_pack_crane()
     # get other images from android build
     ln -s $CRANE_IMAGE_OUT/boot.img boot.fex
     ln -s $CRANE_IMAGE_OUT/system.img system.fex
+ 
+$LICHEE_OUT_AND=../../out_android
+if [ ! -d "${LICHEE_OUT_AND}" ]; then     
+    ln -s $LICHEE_OUT_AND/recovery.img recovery.fex
+else
     ln -s $CRANE_IMAGE_OUT/recovery.img recovery.fex
+fi
+
+    # LINUX ADDITION
+	$LICHEE_OUT_LIN=../../out_linux
+    ln -s $LICHEE_OUT/boot.img bootlin.fex
+    ln -s $LICHEE_OUT/rootfs.ext4 rootfs.fex
+
+
 
     # checksum for all fex
     FileAddSum bootloader.fex vbootloader.fex
